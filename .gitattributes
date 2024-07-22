@@ -1,5 +1,7 @@
 Discrete[[:space:]]Mathematics[[:space:]]II/Discreta2-Lab1(Parte[[:space:]]1)/labdiscreta2(2024)/archivostest/8suPGJ.txt filter=lfs diff=lfs merge=lfs -text
 Discrete[[:space:]]Mathematics[[:space:]]II/Discreta2-Lab1(Parte[[:space:]]1)/labdiscreta2(2024)/archivostest/Harkon.txt filter=lfs diff=lfs merge=lfs -text
 Networks[[:space:]]and[[:space:]]Distributed[[:space:]]Systems/redes24lab2g09/lab2-hftp-kickstart/Video[[:space:]]Lab[[:space:]]2[[:space:]]Redes.zip filter=lfs diff=lfs merge=lfs -text
+Discrete[[:space:]]Mathematics[[:space:]]II/Discreta2-Lab1(Parte2)/discreta2/archivostest/Harkon.txt filter=lfs diff=lfs merge=lfs -text
+Discrete[[:space:]]Mathematics[[:space:]]II/Discreta2-Lab1(Parte2)/discreta2/archivostest/8suPGJ.txt filter=lfs diff=lfs merge=lfs -text
 *.txt filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
