@@ -1,0 +1,44 @@
+#include "array_helpers.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+unsigned int array_from_file(int array[],
+                             unsigned int max_size,
+                             const char *filepath) {
+    unsigned int size;
+    FILE *f;
+
+    f = fopen(filepath, "r"); //Abro el archivo y se lo asigno a mi variable "f".
+    fscanf(f, "%u", &size); //Escaneo el primer entero del archivo. En este caso, la longitud del arreglo.
+    for (unsigned int i = 0; i < size; i++)//Escaneo uno por uno los enteros después del salto de línea y los coloco dentro del arreglo en su posición correspondiente.
+    {
+        fscanf(f, "%d", &array[i]);
+    }
+    if (feof(f) != 0 || size > max_size) //Este if soluciona el problema para el caso "example-invalid.in" y cuando se lee un tamaño del arreglo mayor al estipulado.
+        {
+            printf("La longitud del arreglo no es acorde a su cantidad de elementos.\n");
+            exit(EXIT_FAILURE);
+        }
+    fclose(f);
+
+    return size;
+}
+
+void array_dump(int a[], unsigned int length) {
+    /*int longitud = sizeof(a) / sizeof(a[0]);*/
+
+    if (length == 0) //Comprueba si el arreglo es vacío.
+    {
+        printf("[] \n"); //Output para un arreglo vacío.
+    }
+    else //De no ser vacío imprime una vez los corchetes, donde el corchete del final va con el último elemento, y dentro de ellos rellena el arreglo escaneando uno por uno los números del fichero colocándolos en su posición correspondiente.
+    {
+        printf("[ "); 
+    for (unsigned int i = 0; i < length - 1; i++)
+    {
+        printf("%d, ", a[i]);
+    }  
+    printf("%d] \n", a[length-1]); 
+    }
+}

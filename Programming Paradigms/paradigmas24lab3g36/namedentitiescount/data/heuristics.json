@@ -1,0 +1,14 @@
+[
+    {
+      "keyname": "CapWord",
+      "description": "All words beginning with a capital letter are considered a named entity"
+    },
+    {
+      "keyname": "NoDot",
+      "description": "All words that do not have a dot as a prefix and begin with capital letters"
+    },
+    {
+      "keyname": "FilterCP",
+      "description": "Identical to CapWord, but with a filter to reduce false positives"
+    }
+]

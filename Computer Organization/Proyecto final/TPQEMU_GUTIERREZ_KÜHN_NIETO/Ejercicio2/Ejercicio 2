@@ -1,0 +1,8 @@
+Alumnos: Camilo Gutiérrez, 45346649
+		 Matías Kühn, 43647398
+		 Lucas Nieto, 45092890
+
+Descripción: Pinta un paisaje de Tatooine (planeta de Star Wars). Con las teclas "a" y "d" se da moviento horizontal a R2D2 (arturito), con "la barra espaciadora" se cambia entre amanecer y anochecer, y las teclas "w" y "s" permiten alejar o acercar al personaje respectivamente. 
+
+* Aclaraciones: - dejar apretada la barra espaciadora no cambiara de dia a noche o viseversa.
+		- El ejercicio 2 brinda mayor libertad respecto a las secuencias de moviento que se pueden realizar, puesto que, a diferencia del 1 siempre es posible darle continuidad al movimiento horizontal y alternar entre posiciones verticales, con cualquiera de los fondos. 

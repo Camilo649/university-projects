@@ -1,0 +1,11 @@
+	.text
+    	
+
+	MOVZ X2, 0xC2C2, LSL#0		//X2 = 0x000000000000C2C2
+	MOVK X2, 0xB1B1, LSL#32 	//X2 = 0x0000B1B10000C2C2
+	MOVK X2, 0xA0A0, LSL#48     //X2 = 0xA0A0B1B10000C2C2
+    
+
+
+end:
+infloop: B infloop
