@@ -1,0 +1,26 @@
+Contrastar estas líneas con lo que ven en el archivo de ejemplo de testbench
+Los guiones bajos se ignoran, son puramente para organización de quien arma el archivo de testbench
+Tranquilamente la línea de abajo podría ser 11111000010011110000, por favor no hagan esto.
+Esto se asigna en la línea {Op, expected_output} = testvectors[vector_index];
+No hay sintaxis que conozca para comentarios en archivos de testvectors, así que tienen que borrar este texto. Adiós :'(
+111_1100_0010___0_1_1_1_1_0_0_00
+111_1100_0000___1_1_0_0_0_1_0_00
+101_1010_0000___1_0_0_0_0_0_1_01
+100_0101_1000___0_0_0_1_0_0_0_10
+110_0101_1000___0_0_0_1_0_0_0_10
+100_0101_0000___0_0_0_1_0_0_0_10
+101_0101_0000___0_0_0_1_0_0_0_10
+101_1010_0001___1_0_0_0_0_0_1_01
+101_1010_0010___1_0_0_0_0_0_1_01
+101_1010_0011___1_0_0_0_0_0_1_01
+101_1010_0100___1_0_0_0_0_0_1_01
+101_1010_0101___1_0_0_0_0_0_1_01
+101_1010_0110___1_0_0_0_0_0_1_01
+101_1010_0111___1_0_0_0_0_0_1_01
+000_0011_1100___0_0_0_0_0_0_0_00
+010_0011_0110___0_0_0_0_0_0_0_00
+011_0010_0011___0_0_0_0_0_0_0_00
+001_0010_0011___0_0_0_0_0_0_0_00
+111_1010_0010___0_0_0_0_0_0_0_00
+111_1100_0100___0_0_0_0_0_0_0_00
+111_1001_1111___0_0_0_0_0_0_0_00

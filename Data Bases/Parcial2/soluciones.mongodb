@@ -1,0 +1,380 @@
+// 1. Buscar los documentos donde el alumno tiene: 
+// (i) un puntaje mayor o igual a 80  en "exam" o bien un puntaje mayor o igual a 90 en "quiz" y 
+// (ii) un puntaje mayor o igual a 60 en todos los "homework" (en otras palabras no tiene un puntaje menor a 60 en algún "homework") 
+// Se debe mostrar todos los campos excepto el _id, ordenados por el id de la clase y id del alumno en orden descendente y ascendente respectivamente..
+
+db.grades.find(
+    {
+        scores:{
+            $elemMatch:{
+                type:{
+                    $eq:"exam"
+                },
+                score:{
+                    $gte:80
+                }
+            },
+            $elemMatch:{
+                type:{
+                    $eq:"quiz"
+                },
+                score:{
+                    $gte:90
+                }
+            },
+            $not:{
+                $elemMatch:{
+                    type:{
+                        $eq:"homework"
+                    },
+                    score:{
+                        $lt:60
+                    }
+                }
+              }
+        }
+    },
+    {
+        student_id:1,
+        scores:1,
+        class_id:1,
+        _id:0
+    }
+). sort(
+    {
+        class_id:-1,
+    },
+    {
+        student_id:1
+    }
+);
+
+// 2.Calcular el puntaje mínimo, promedio, y máximo que obtuvo el alumno en las clases 20, 220, 420. El resultado debe mostrar además el id de la clase y el id del alumno, ordenados por alumno y clase en orden ascendentes. 
+
+db.grades.aggregate([
+    {
+        $match: {
+            $or: [
+                {class_id:20},
+                {class_id:220},
+                {class_id:420}
+            ]
+        }
+    },
+    {
+        $project:{
+            class_id: 1,
+            student_id:1,
+            scoreMin:{$min:"$scores.score"},
+            scoreAvg:{$avg:"$scores.score"},
+            scoreMax:{$max:"$scores.score"},
+            _id:0
+        }
+    },
+    {
+        $sort:{
+            student_id:1,
+            class_id:1
+        }
+    }
+]);
+
+// 3. Para cada clase listar el puntaje máximo de las evaluaciones de tipo "exam" y el puntaje máximo de las evaluaciones de tipo "quiz". Listar en orden ascendente por el id de la clase. 
+// HINT: El operador $filter puede ser de utilidad.
+
+db.grades.aggregate([
+    {
+        $project:{
+            class_id:1,
+            maxExams:{
+                $filter:{
+                    input:"$scores",
+                    as:"elem",
+                    cond:{
+                        $eq:["$$elem.type", "exam"]
+                    }
+                }
+            },
+            maxQuizs:{
+                $filter:{
+                    input:"$scores",
+                    as:"elem",
+                    cond:{
+                        $eq:["$$elem.type", "quiz"]
+                    }
+                }
+            },
+            _id:0
+        }
+    },
+    {
+        $unwind: "$maxExams"
+    },
+    {
+        $unwind: "$maxQuizs"
+    },
+    {
+        $group:{
+            _id: "$class_id",
+            maxExam:{
+                $max:"$maxExams.score"
+            },
+            maxQuiz:{
+                $max:"$maxQuizs.score"
+            }
+        }
+    },
+    {
+        $project:{
+            class_id:"$_id",
+            maxExam:1,
+            maxQuiz:1,
+            _id:0
+        }
+    },
+    {
+        $sort:{
+            class_id:1
+        }
+    }
+]);
+
+// 4. Crear una vista "top10students" que liste los 10 estudiantes con los mejores promedios.
+
+db.createView(
+    "top10students",
+    "grades",
+    [
+        {
+            $unwind:"$scores"
+        },
+        {
+            $group: {
+              _id: "$student_id",
+              scoreAvg:{
+                $max:"$scores.score"
+              }
+            }
+        },
+        {
+            $project:{
+                student_id:"$_id",
+                scoreAvg:1,
+                _id:0
+            }
+        },
+        {
+            $sort:{
+                scoreAvg: -1
+            }
+        },
+        {
+            $limit: 10
+        }
+    ]
+);
+
+// 5. Actualizar los documentos de la clase 339, agregando dos nuevos campos: el campo "score_avg" que almacena el puntaje promedio y el campo "letter" que tiene el valor "NA" si el puntaje promedio está entre [0, 60), el valor "A" si el puntaje promedio está entre [60, 80) y el valor "P" si el puntaje promedio está entre [80, 100]. 
+// HINTS: (i) para actualizar se puede usar pipeline de agregación. 
+//        (ii) El operador $cond o $switch pueden ser de utilidad.
+
+
+db.grades.updateMany(
+    {
+        "class_id":339
+    },
+    [
+        {
+            $set:{
+                score_avg:{
+                    $divide:[
+                        {
+                            $reduce:{
+                                input:"$scores",
+                                initialValue:0,
+                                in:{$add:["$$value", "$$this.score"]}
+                            }
+                        },
+                        {
+                            $cond: {
+                                if:{$eq:[{$size:"$scores"},0]},
+                                then:1,
+                                else:{$size:"$scores"}
+                            }
+                        }
+                    ]
+                },
+                
+            }
+        },
+        {
+            $set:{
+                letter:{
+                    $switch:{
+                        branches:[
+                            {
+                                case:{
+                                    $and:[{$gte:["$score_avg", 0]}, {$lt:["$score_avg", 60]}] 
+                                }, 
+                                then:"NA"
+                            },
+                            {
+                                case:{
+                                    $and:[{$gte:["$score_avg", 60]}, {$lt:["$score_avg", 80]}]
+                                }, 
+                                then:"A" 
+                            },
+                            {
+                                case:{
+                                    $and:[{$gte:["$score_avg", 80]}, {$lte:["$score_avg", 100]}]
+                                }, 
+                                then:"P"
+                            }
+                        ],
+                        default: null
+                    }
+                }
+            }
+        }
+    ]
+);
+
+// CHECK
+// db.grades.find(
+//     {"class_id":339},
+//     {}
+// )
+
+// 6. (a) Especificar reglas de validación en la colección grades para todos sus campos y subdocumentos anidados. Inferir los tipos y otras restricciones que considere adecuados para especificar las reglas a partir de los documentos de la colección. 
+
+db.runCommand({
+    collMod: "grades",
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["student_id", "scores", "class_id"],
+            properties: {
+                student_id: {
+                    bsonType: "int",
+                    minimum: 0, // No consideraremos ids negativas
+                    description: "The student_id field must be a positive int."
+                },
+                scores: {
+                    bsonType: "array",
+                    minItems: 1,
+                    maxItems: 50000, // Consideramos que más de esta cantidad de transacciones excedería el tamaño máximo de un documento (16MB)
+                    items: {
+                        bsonType: "object",
+                        required: ["type", "score"],
+                        properties: {
+                          type: {
+                            enum: ["exam", "quiz", "homework"],
+                            description: "The type field must be a string and can only be one of the given enum values."
+                          },
+                          score: {
+                            bsonType: "double",
+                            minimum: 0, // No consideraremos puntajes negativos
+                            maximum: 100, // El puntaje más alto es 100
+                            description: "The student_id field must be a positive int."
+                          }
+                        }
+                    },
+                    uniqueItems: true,
+                    description: "The scores field must be an array."
+                },
+                class_id: {
+                    bsonType: "int",
+                    minimum: 0, // No consideraremos ids negativas
+                    description: "The student_id field must be a positive int."
+                }
+            },
+        }
+    },
+    validationLevel: "strict",
+    validationAction: "error",
+});
+
+//    (b) Testear la regla de validación generando dos casos de fallas en la regla de validación y un caso de éxito en la regla de validación. Aclarar en la entrega cuales son los casos y por qué fallan y cuales cumplen la regla de validación. Los casos no deben ser triviales, es decir los ejemplos deben contener todos los campos..
+
+// CASOS QUE FALLAN:
+
+// "student_id" es negativo
+
+db.grades.insertOne(
+    {
+        student_id: -1,
+        scores:[
+            { type: 'exam', score: 90.9 }
+        ],
+        class_id: 6
+    }
+);
+
+// "type" es inválido
+
+db.grades.insertOne(
+    {
+        student_id: 1,
+        scores:[
+            { type: 'oral', score: 90.9 }
+        ],
+        class_id: 6
+    }
+);
+
+// CASOS QUE PASAN
+
+db.grades.insertOne(
+    {
+        student_id: 1,
+        scores:[
+            { type: "exam", score: 90.9 }
+        ],
+        class_id: 6
+    }
+);
+
+db.grades.insertOne(
+    {
+        student_id: 1,
+        scores:[
+            { type: "exam", score: 90.9 },
+            { type: "quiz", score: 70.9},
+            { type: "homework", score: 80.9 }
+        ],
+        class_id: 6
+    }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

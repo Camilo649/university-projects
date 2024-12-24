@@ -1,0 +1,19 @@
+module Ejercicio12 (input logic Clk, ShiftIn, load ShiftEn,
+						  input logic [3:0] ParallelIn,
+						  output logic ShiftOut,
+						  output logic [3:0] RegContent);
+						  
+	logic [3:0] shift_reg;
+	
+	always_ff @(posedge Clk)
+		if(loaf)
+			shift_reg <= ParalellIn;
+		else if (ShiftEn)
+			shift_reg <= {shift_reg[2:0], ShiftIn};
+			
+	always_comb
+	begin
+		ShiftOut = shift_reg[3];
+		RegContent = shift_reg;
+	end
+endmoule

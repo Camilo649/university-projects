@@ -1,0 +1,6 @@
+Login:
+mysql -u Camilo -h localhost -p
+
+Cargar DB por consola:
+mysql -u Camilo -p < archivo.sql 
+

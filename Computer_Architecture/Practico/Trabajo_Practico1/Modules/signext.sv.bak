@@ -1,0 +1,4 @@
+module signext #(parameter N = 64)(
+	input logic [31:0] a,
+	output logic [N-1:0] y
+	);

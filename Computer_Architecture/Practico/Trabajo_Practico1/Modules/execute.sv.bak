@@ -1,0 +1,17 @@
+module execute #(parameter N = 64)(
+	
+	input logic PCSrc_F,
+	input logic clk,
+	input logic reset,
+	input logic [N-1:0] PCBranch_F,
+	output logic [N-1:0] imem_addr_F
+	);
+	
+	logic [N-1:0] mux_output, adder_output;
+	logic adder_zero;
+	
+	mux2 myMux2(adder_output, PCBranch_F, PCSrc_F, mux_output);
+	flopr myFlopr(clk, reset, mux_output, imem_addr_F);
+	alu myAdder(imem_addr_F,64'b0000000000000000000000000000000000000000000000000000000000000100, 4'b0010, adder_output, adder_zero);
+
+endmodule

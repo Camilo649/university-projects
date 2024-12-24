@@ -1,0 +1,6 @@
+[submodule "Software Engineering/Proyecto/Backend"]
+	path = Software Engineering/Proyecto/Backend
+	url = https://github.com/HoodedHackers/Backend
+[submodule "Software Engineering/Proyecto/Frontend"]
+	path = Software Engineering/Proyecto/Frontend
+	url = https://github.com/HoodedHackers/Frontend

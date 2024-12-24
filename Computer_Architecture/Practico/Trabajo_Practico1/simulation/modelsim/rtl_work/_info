@@ -1,0 +1,65 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/simulation/modelsim
+vEjercicio10_tb
+Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+Z2 !s110 1726728214
+!i10b 1
+!s100 5JU@FDgem[n2X@9gV5PJ21
+Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I7hQS68h3m`DSAUA5D8gOP3
+Z4 VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+w1726631108
+8/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv
+F/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv
+!i122 1
+L0 1 20
+Z5 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z6 !s108 1726728214.000000
+!s107 /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica|/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv|
+!i113 1
+Z7 o-sv -work work
+Z8 !s92 -sv -work work +incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica
+Z9 tCvgOpt 0
+n@ejercicio10_tb
+vEjercicio13
+R1
+R2
+!i10b 1
+!s100 9VF71g8n48cE8T3PDF_K63
+R3
+IZ5mD=zDlZeAQ2aTGb^mhf0
+R4
+S1
+R0
+w1726725592
+8/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio13.sv
+F/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio13.sv
+!i122 0
+L0 1 24
+R5
+r1
+!s85 0
+31
+R6
+!s107 /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio13.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica|/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio13.sv|
+!i113 1
+R7
+R8
+R9
+n@ejercicio13

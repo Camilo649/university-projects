@@ -1,0 +1,11 @@
+module regfile #(parameter N = 64)(
+	
+	input logic clk, we3,
+	input logic [4:0] ra1, ra2, wa3,
+	input logic [N-1:0] wd3,
+	output logic [N-1:0] rd1, rd2
+	);
+				 
+	
+		
+endmodule

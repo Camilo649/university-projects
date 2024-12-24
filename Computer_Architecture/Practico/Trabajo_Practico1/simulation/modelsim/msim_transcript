@@ -1,0 +1,56 @@
+# ERROR: No extended dataflow license exists
+# do SingleCycleProcessor_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 2020.1 Lib Mapping Utility 2020.02 Feb 28 2020
+# vmap work rtl_work 
+# Copying /home/camilo/Desktop/Programs/Quartus/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vlog -sv -work work +incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica {/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio13.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 03:43:34 on Sep 19,2024
+# vlog -reportprogress 300 -sv -work work "+incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica" /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio13.sv 
+# -- Compiling module Ejercicio13
+# 
+# Top level modules:
+# 	Ejercicio13
+# End time: 03:43:34 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# vlog -sv -work work +incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica {/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 03:43:34 on Sep 19,2024
+# vlog -reportprogress 300 -sv -work work "+incdir+/home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica" /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv 
+# -- Compiling module Ejercicio10_tb
+# 
+# Top level modules:
+# 	Ejercicio10_tb
+# End time: 03:43:34 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -voptargs="+acc"  Ejercicio10_tb
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -voptargs=""+acc"" Ejercicio10_tb 
+# Start time: 03:43:34 on Sep 19,2024
+# Loading sv_std.std
+# Loading work.Ejercicio10_tb
+# ** Error: (vsim-3033) Instantiation of 'Ejercicio10' failed. The design unit was not found.
+#    Time: 0 ps  Iteration: 0  Instance: /Ejercicio10_tb File: /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/Practica/Ejercicio10_tb.sv Line: 4
+#         Searched libraries:
+#             /home/camilo/Desktop/Programs/Quartus/modelsim_ase/altera/verilog/altera
+#             /home/camilo/Desktop/Programs/Quartus/modelsim_ase/altera/verilog/220model
+#             /home/camilo/Desktop/Programs/Quartus/modelsim_ase/altera/verilog/sgate
+#             /home/camilo/Desktop/Programs/Quartus/modelsim_ase/altera/verilog/altera_mf
+#             /home/camilo/Desktop/Programs/Quartus/modelsim_ase/altera/verilog/altera_lnsim
+#             /home/camilo/Desktop/Programs/Quartus/modelsim_ase/altera/verilog/cycloneive
+#             /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/simulation/modelsim/rtl_work
+#             /home/camilo/Desktop/university-projects-main/university-projects-main/Computer_Architecture/Projectos_Quartus/Trabajo_Practico1/simulation/modelsim/rtl_work
+# Error loading design
+# Error: Error loading design
+#        Pausing macro execution
+# MACRO ./SingleCycleProcessor_run_msim_rtl_verilog.do PAUSED at line 12
+# End time: 03:43:41 on Sep 19,2024, Elapsed time: 0:00:07
+# Errors: 1, Warnings: 0

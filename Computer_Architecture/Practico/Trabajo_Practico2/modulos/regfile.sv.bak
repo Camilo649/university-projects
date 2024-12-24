@@ -1,0 +1,33 @@
+`timescale 1 ns / 100 ps
+module regfile #(parameter N = 64)(
+	
+	input logic clk, we3,
+	input logic [4:0] ra1, ra2, wa3,
+	input logic [N-1:0] wd3,
+	output logic [N-1:0] rd1, rd2
+	);
+				 
+	logic [N-1:0] Registers [0:31] ='{0,1,2,3,4,5,6,7,
+												 8,9,10,11,12,13,14,15,
+												 16,17,18,19,20,21,22,23,
+												 24,25,26,27,28,29,30,0};
+	
+	always_ff @(posedge clk) begin
+		if((we3) && (wa3 !== 31)) begin
+			Registers[wa3] <= wd3;
+		end
+	end
+	
+	always_comb begin
+		if (ra1 == wa3 && we3 && wa3 !== 31)
+			rd1 = wd3;
+		else
+			rd1 = Registers[ra1];
+		
+		if (ra2 == wa3 && we3 && wa3 !== 31)
+			rd2 = wd3;
+		else
+			rd2 = Registers[ra2];
+	end
+	
+endmodule
