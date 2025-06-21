@@ -1,0 +1,1265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="--wm-toolbar-height: 67px;"><head><script src="Auto-vectorization%20with%20gcc%204.7_files/athena.js" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app223.us.archive.org';v.server_ms=3069;archive_analytics.send_pageview({});});</script>
+<script type="text/javascript" src="Auto-vectorization%20with%20gcc%204.7_files/bundle-playback.js" charset="utf-8"></script>
+<script type="text/javascript" src="Auto-vectorization%20with%20gcc%204.7_files/wombat.js" charset="utf-8"></script>
+<script>window.RufflePlayer=window.RufflePlayer||{};window.RufflePlayer.config={"autoplay":"on","unmuteOverlay":"hidden"};</script>
+<script type="text/javascript" src="Auto-vectorization%20with%20gcc%204.7_files/ruffle.js"></script>
+<script type="text/javascript">
+    __wm.init("https://web.archive.org/web");
+  __wm.wombat("http://locklessinc.com:80/articles/vectorize/","20120420075252","https://web.archive.org/","web","https://web-static.archive.org/_static/",
+	      "1334908372");
+</script>
+<link rel="stylesheet" type="text/css" href="Auto-vectorization%20with%20gcc%204.7_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="Auto-vectorization%20with%20gcc%204.7_files/iconochive.css">
+<!-- End Wayback Rewrite JS Include -->
+
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+<link rel="alternate" type="application/rss+xml" href="https://web.archive.org/web/20120420075252/https://locklessinc.com/feed.rss" title="Lockless Inc. Articles">
+
+<title>Auto-vectorization with gcc 4.7</title>
+<meta name="description" content="Testing how well gcc 4.7 autovectorizes C code">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" type="text/css" href="Auto-vectorization%20with%20gcc%204.7_files/style.css">
+<link rel="icon" type="image/vnd.microsoft.icon" href="https://web.archive.org/web/20120420075252im_/https://locklessinc.com/favicon.ico">
+</head><body><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script>__wm.rw(0);</script>
+<div id="wm-ipp-base" lang="en" style="display: block; direction: ltr; height: 67px;" toolbar-mode="auto">
+</div><div id="wm-ipp-print">The Wayback Machine - https://web.archive.org/web/20120420075252/http://locklessinc.com:80/articles/vectorize/</div>
+<script type="text/javascript">//<![CDATA[
+__wm.bt(750,27,25,2,"web","https://locklessinc.com/articles/vectorize/","20120420075252",1996,"https://web-static.archive.org/_static/",["https://web-static.archive.org/_static/css/banner-styles.css?v=p7PEIJWi","https://web-static.archive.org/_static/css/iconochive.css?v=3PDvdIFv"], false);
+  __wm.rw(1);
+//]]></script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+ 
+
+<div class="header1">
+<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/" title="Lockless Inc"><img border="0" src="Auto-vectorization%20with%20gcc%204.7_files/header_bg.jpg" alt="Lockless Inc"></a>
+</div>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tbody><tr class="header2"><td colspan="3"></td></tr>
+	<tr class="header3"><td colspan="3"></td></tr>
+	<tr>
+		<td class="menu_2" valign="top">
+		<ul>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/" title="Lockless Inc">Lockless Inc</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/cindex.shtml">Purchase »</a>
+		<ul>
+			<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/linux.shtml">Linux</a></li>
+			<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/windows.shtml">Windows</a></li>
+			<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/developers.shtml">Developers</a></li>
+		</ul>
+		</li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/benchmarks.shtml">Benchmarks</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/install.shtml">Installation</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/articles/">Articles</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/technical.shtml">Technical</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/downloads/">Downloads</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/man/">Documentation</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/whatsnew.shtml">What's New</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/about.shtml">About Us</a></li>
+		<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/help.shtml">Help</a></li>
+		</ul>
+		<br><img src="Auto-vectorization%20with%20gcc%204.7_files/newcc_logos.png" border="0" alt="credit card logos">
+		</td>
+		<td class="maintext">
+
+<h1 align="center">Auto-vectorization with gcc 4.7</h1>
+
+<p>One way of speeding up code which contains many loops is to use 
+vectorization.  On modern machines, this means the use of SSE or AVX 
+instructions.  However, if one had to manually re-write code into 
+assembly language in order to do this, then very few programs would.  
+The reason is obvious: assembly language is error-prone, and a difficult
+ skill to master.   It is also intrinsically nonportable.  Fortunately, 
+compiler writers have a few tricks up their sleeves to help us.</p>
+
+<p>At the lowest level, gcc exposes compiler intrinsics that match 
+one-to-one with the vector instructions on the the cpu.  Therefore, it 
+is possible to write code using them in a higher level language like C 
+or C++, and still have nearly complete control over the output.  
+Unfortunately, since these intrinsics are still very low-level, code 
+written using them can be a little hard to read.  The code is also not 
+portable to machines that lack the instructions corresponding to the 
+intrinsics used.</p>
+
+<p>gcc has another extension that helps with vectorization, vector 
+types.  It is possible to construct types that represent arrays (i.e. 
+vectors) of smaller more basic types.  Then, code can use normal C (or 
+C++) operations on those types.  The result will be vectorized over the 
+whole vector of basic types.  In other words, you can add two vectors 
+together to make a third, and gcc will understand exactly what you mean 
+and use the instruction you want.  More recent versions of gcc allow 
+array accesses into the vector types, making them even more flexible and
+ easy to use.</p>
+
+<p>Vector types have a disadvantage though, code needs to be rewritten 
+in order to use them.  Instead of passing around standard types, the 
+non-portable compiler-specific ones need to be used instead.  Also, 
+since there are many vector operations that don't correspond to C 
+operators, you may need to fall back to intrinsics in order to get the 
+instructions you want.</p>
+
+<p>At an even higher level is auto-vectorization.  There, code isn't 
+re-written at all.  It remains portable C, and the compiler 
+automagically determines how to vectorize it.  Since ideally, no work 
+needs to be done, one can simply recompile with a new compiler and get 
+all the speed advantages of vectorization with very little effort 
+required.  The big question though, is how much code can gcc vectorize? 
+ If very few loops can be, then this feature isn't too useful.  
+Conversely, if gcc is very smart, then the lower level techniques aren't
+ necessary any more.</p>
+
+<h3>Auto-vectorization</h3>
+<p>We use the most recent version of gcc at the time of writing (4.7) to
+ test to see how well auto-vectorization works in practice.  We will try
+ a series of test routines with simple loops to see what gcc does with 
+them.  To start with, we will use a constant loop count.  (It is 
+possible to have a variable loop count, but in most code that doesn't 
+change too much in the important inner loop.)</p>
+
+<pre><code>
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+
+#define SIZE	(1L &lt;&lt; 16)
+
+void test1(double *a, double *b)
+{
+	int i;
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		a[i] += b[i];
+	}
+}
+</code></pre>
+<p>The first test simply adds an array of doubles onto a second array.  We compile with <code>-O3</code>
+ which in modern gcc turns on auto-vectorization for us.  We use no 
+other optimization compile-time flags to get the default from the 
+compiler.  The resulting routine in asm is:</p>
+
+<pre><code>
+&lt;+0&gt;:	  lea	 0x10(%rsi),%rax
+&lt;+4&gt;:	  cmp	 %rax,%rdi
+&lt;+7&gt;:	  jb	 0x47 &lt;test1+71&gt;
+&lt;+9&gt;:	  xor	 %eax,%eax
+&lt;+11&gt;:    nopl   0x0(%rax,%rax,1)
+&lt;+16&gt;:    movsd  (%rdi,%rax,1),%xmm1
+&lt;+21&gt;:    movsd  (%rsi,%rax,1),%xmm2
+&lt;+26&gt;:    movhpd 0x8(%rdi,%rax,1),%xmm1
+&lt;+32&gt;:    movhpd 0x8(%rsi,%rax,1),%xmm2
+&lt;+38&gt;:    movapd %xmm1,%xmm0
+&lt;+42&gt;:    addpd  %xmm2,%xmm0
+&lt;+46&gt;:    movlpd %xmm0,(%rdi,%rax,1)
+&lt;+51&gt;:    movhpd %xmm0,0x8(%rdi,%rax,1)
+&lt;+57&gt;:    add	 $0x10,%rax
+&lt;+61&gt;:    cmp	 $0x80000,%rax
+&lt;+67&gt;:    jne	 0x10 &lt;test1+16&gt;
+&lt;+69&gt;:    repz retq 
+&lt;+71&gt;:    lea	 0x10(%rdi),%rax
+&lt;+75&gt;:    cmp	 %rax,%rsi
+&lt;+78&gt;:    jae	 0x9 &lt;test1+9&gt;
+&lt;+80&gt;:    xor	 %eax,%eax
+&lt;+82&gt;:    nopw   0x0(%rax,%rax,1)
+&lt;+88&gt;:    movsd  (%rdi,%rax,1),%xmm0
+&lt;+93&gt;:    addsd  (%rsi,%rax,1),%xmm0
+&lt;+98&gt;:    movsd  %xmm0,(%rdi,%rax,1)
+&lt;+103&gt;:   add	 $0x8,%rax
+&lt;+107&gt;:   cmp	 $0x80000,%rax
+&lt;+113&gt;:   jne	 0x58 &lt;test1+88&gt;
+&lt;+115&gt;:   repz retq
+</code></pre>
+<p>The above code is interesting... but not particularly optimal.  gcc 
+first tests to see if the arrays partially overlap, if so it jumps to a 
+slow loop that does one addition at a time.  If the arrays are not 
+directly on top of each other, gcc then does a rather strange thing of 
+loading each double manually, and stuffing them into <code>%xmm1</code> and <code>%xmm2</code>  It then wastes time by copying into <code>%xmm0</code> before finally doing the packed addition.  Once the addition is done, it then moves the data out one double at a time.</p>
+
+<p>The above can at best be called partially vectorized.  The problem is
+ that the compiler is constrained by what we tell it about the arrays.  
+If we tell it more, then perhaps it can do more optimization.  The most 
+obvious thing is to inform the compiler that no overlap is possible.  
+This is done in standard C by using the <code>restrict</code> qualifier for the pointers.  The resulting code looks like:</p>
+
+<pre><code>
+void test2(double * restrict a, double * restrict b)
+{
+	int i;
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		a[i] += b[i];
+	}
+}
+</code></pre>
+
+<p>This compiles into:</p>
+<pre><code>
+&lt;+0&gt;:	  mov	 %rdi,%rax
+&lt;+3&gt;:	  push   %rbp
+&lt;+4&gt;:	  shl	 $0x3c,%rax
+&lt;+8&gt;:	  sar	 $0x3f,%rax
+&lt;+12&gt;:    push   %rbx
+&lt;+13&gt;:    mov	 %rax,%rdx
+&lt;+16&gt;:    and	 $0x1,%edx
+&lt;+19&gt;:    test   %rdx,%rdx
+&lt;+22&gt;:    mov	 %edx,%ecx
+&lt;+24&gt;:    je	 0x14c &lt;test2+204&gt;
+&lt;+30&gt;:    movsd  (%rdi),%xmm0
+&lt;+34&gt;:    mov	 $0xffff,%ebx
+&lt;+39&gt;:    mov	 $0x1,%edx
+&lt;+44&gt;:    addsd  (%rsi),%xmm0
+&lt;+48&gt;:    movsd  %xmm0,(%rdi)
+&lt;+52&gt;:    mov	 $0x10000,%r11d
+&lt;+58&gt;:    and	 $0x1,%eax
+&lt;+61&gt;:    sub	 %ecx,%r11d
+&lt;+64&gt;:    mov	 %r11d,%r10d
+&lt;+67&gt;:    shr	 %r10d
+&lt;+70&gt;:    mov	 %r10d,%ebp
+&lt;+73&gt;:    add	 %ebp,%ebp
+&lt;+75&gt;:    je	 0x112 &lt;test2+146&gt;
+&lt;+77&gt;:    lea	 0x0(,%rax,8),%r8
+&lt;+85&gt;:    xor	 %ecx,%ecx
+&lt;+87&gt;:    xor	 %eax,%eax
+&lt;+89&gt;:    lea	 (%rdi,%r8,1),%r9
+&lt;+93&gt;:    add	 %rsi,%r8
+&lt;+96&gt;:    movsd  (%r8,%rax,1),%xmm1
+&lt;+102&gt;:   add	 $0x1,%ecx
+&lt;+105&gt;:   movapd (%r9,%rax,1),%xmm0
+&lt;+111&gt;:   movhpd 0x8(%r8,%rax,1),%xmm1
+&lt;+118&gt;:   addpd  %xmm1,%xmm0
+&lt;+122&gt;:   movapd %xmm0,(%r9,%rax,1)
+&lt;+128&gt;:   add	 $0x10,%rax
+&lt;+132&gt;:   cmp	 %r10d,%ecx
+&lt;+135&gt;:   jb	 0xe0 &lt;test2+96&gt;
+&lt;+137&gt;:   add	 %ebp,%edx
+&lt;+139&gt;:   sub	 %ebp,%ebx
+&lt;+141&gt;:   cmp	 %ebp,%r11d
+&lt;+144&gt;:   je	 0x149 &lt;test2+201&gt;
+&lt;+146&gt;:   movslq %edx,%rcx
+&lt;+149&gt;:   lea	 0x0(,%rcx,8),%rdx
+&lt;+157&gt;:   lea	 (%rdi,%rdx,1),%rax
+&lt;+161&gt;:   add	 %rsi,%rdx
+&lt;+164&gt;:   lea	 -0x1(%rbx),%esi
+&lt;+167&gt;:   add	 %rsi,%rcx
+&lt;+170&gt;:   lea	 0x8(%rdi,%rcx,8),%rcx
+&lt;+175&gt;:   nop
+&lt;+176&gt;:   movsd  (%rax),%xmm0
+&lt;+180&gt;:   addsd  (%rdx),%xmm0
+&lt;+184&gt;:   add	 $0x8,%rdx
+&lt;+188&gt;:   movsd  %xmm0,(%rax)
+&lt;+192&gt;:   add	 $0x8,%rax
+&lt;+196&gt;:   cmp	 %rcx,%rax
+&lt;+199&gt;:   jne	 0x130 &lt;test2+176&gt;
+&lt;+201&gt;:   pop	 %rbx
+&lt;+202&gt;:   pop	 %rbp
+&lt;+203&gt;:   retq   
+&lt;+204&gt;:   mov	 $0x10000,%ebx
+&lt;+209&gt;:   xor	 %edx,%edx
+&lt;+211&gt;:   jmpq   0xb4 &lt;test2+52&gt;
+</code></pre>
+<p>The above is an enormous monstrosity.  The problem here is alignment.
+  gcc is not yet allowed to assume that the arrays are 16-byte aligned. 
+ This means that it has to go through all sorts of gymnastics to handle 
+the cases which are not.  (SSE instructions in general do not work with 
+unaligned accesses.)  It also means that the inner loop above can't 
+assume that both arrays are aligned.  If gcc were smart, it could test 
+for the cases where the arrays are either both aligned, or both 
+unaligned, and have a fast inner loop.  However, it doesn't do that 
+currently.</p>
+
+<p>So in order to get the performance we are looking for, we need to 
+tell gcc that the arrays are aligned.  There are a couple of ways to do 
+that.  The first is to construct a (non-portable) aligned type, and use 
+that in the function interface.  The second is to add an intrinsic or 
+two within the function itself.  The second option is easier to 
+implement on older code bases, as other functions calling the one to be 
+vectorized do not have to be modified.  The intrinsic has for this is 
+called <code>__builtin_assume_aligned</code>:</p>
+
+<pre><code>
+void test3(double * restrict a, double * restrict b)
+{
+	int i;
+
+	__builtin_assume_aligned(a, 16);
+	__builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		a[i] += b[i];
+	}
+}
+</code></pre>
+
+<p>Which produces:</p>
+<pre><code>
+&lt;+0&gt;:	  mov	 %rdi,%rax
+&lt;+3&gt;:	  push   %rbp
+&lt;+4&gt;:	  shl	 $0x3c,%rax
+&lt;+8&gt;:	  sar	 $0x3f,%rax
+&lt;+12&gt;:    push   %rbx
+&lt;+13&gt;:    mov	 %rax,%rdx
+&lt;+16&gt;:    and	 $0x1,%edx
+&lt;+19&gt;:    test   %rdx,%rdx
+&lt;+22&gt;:    mov	 %edx,%ecx
+&lt;+24&gt;:    je	 0x22c &lt;test3+204&gt;
+&lt;+30&gt;:    movsd  (%rdi),%xmm0
+&lt;+34&gt;:    mov	 $0xffff,%ebx
+&lt;+39&gt;:    mov	 $0x1,%edx
+&lt;+44&gt;:    addsd  (%rsi),%xmm0
+&lt;+48&gt;:    movsd  %xmm0,(%rdi)
+&lt;+52&gt;:    mov	 $0x10000,%r11d
+&lt;+58&gt;:    and	 $0x1,%eax
+&lt;+61&gt;:    sub	 %ecx,%r11d
+&lt;+64&gt;:    mov	 %r11d,%r10d
+&lt;+67&gt;:    shr	 %r10d
+&lt;+70&gt;:    mov	 %r10d,%ebp
+&lt;+73&gt;:    add	 %ebp,%ebp
+&lt;+75&gt;:    je	 0x1f2 &lt;test3+146&gt;
+&lt;+77&gt;:    lea	 0x0(,%rax,8),%r8
+&lt;+85&gt;:    xor	 %ecx,%ecx
+&lt;+87&gt;:    xor	 %eax,%eax
+&lt;+89&gt;:    lea	 (%rdi,%r8,1),%r9
+&lt;+93&gt;:    add	 %rsi,%r8
+&lt;+96&gt;:    movsd  (%r8,%rax,1),%xmm1
+&lt;+102&gt;:   add	 $0x1,%ecx
+&lt;+105&gt;:   movapd (%r9,%rax,1),%xmm0
+&lt;+111&gt;:   movhpd 0x8(%r8,%rax,1),%xmm1
+&lt;+118&gt;:   addpd  %xmm1,%xmm0
+&lt;+122&gt;:   movapd %xmm0,(%r9,%rax,1)
+&lt;+128&gt;:   add	 $0x10,%rax
+&lt;+132&gt;:   cmp	 %r10d,%ecx
+&lt;+135&gt;:   jb	 0x1c0 &lt;test3+96&gt;
+&lt;+137&gt;:   add	 %ebp,%edx
+&lt;+139&gt;:   sub	 %ebp,%ebx
+&lt;+141&gt;:   cmp	 %ebp,%r11d
+&lt;+144&gt;:   je	 0x229 &lt;test3+201&gt;
+&lt;+146&gt;:   movslq %edx,%rcx
+&lt;+149&gt;:   lea	 0x0(,%rcx,8),%rdx
+&lt;+157&gt;:   lea	 (%rdi,%rdx,1),%rax
+&lt;+161&gt;:   add	 %rsi,%rdx
+&lt;+164&gt;:   lea	 -0x1(%rbx),%esi
+&lt;+167&gt;:   add	 %rsi,%rcx
+&lt;+170&gt;:   lea	 0x8(%rdi,%rcx,8),%rcx
+&lt;+175&gt;:   nop
+&lt;+176&gt;:   movsd  (%rax),%xmm0
+&lt;+180&gt;:   addsd  (%rdx),%xmm0
+&lt;+184&gt;:   add	 $0x8,%rdx
+&lt;+188&gt;:   movsd  %xmm0,(%rax)
+&lt;+192&gt;:   add	 $0x8,%rax
+&lt;+196&gt;:   cmp	 %rcx,%rax
+&lt;+199&gt;:   jne	 0x210 &lt;test3+176&gt;
+&lt;+201&gt;:   pop	 %rbx
+&lt;+202&gt;:   pop	 %rbp
+&lt;+203&gt;:   retq   
+&lt;+204&gt;:   mov	 $0x10000,%ebx
+&lt;+209&gt;:   xor	 %edx,%edx
+&lt;+211&gt;:   jmpq   0x194 &lt;test3+52&gt;
+</code></pre>
+<p>Which is unfortunately identical to the non-aligned version.  It 
+looks like gcc didn't understand what we were telling it.  Lets be more 
+explicit:</p>
+
+<pre><code>
+void test4(double * restrict a, double * restrict b)
+{
+	int i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] += y[i];
+	}
+}
+</code></pre>
+<p>This compiles to produce:</p>
+
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movapd (%rdi,%rax,1),%xmm0
+&lt;+13&gt;:    addpd  (%rsi,%rax,1),%xmm0
+&lt;+18&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+23&gt;:    add	 $0x10,%rax
+&lt;+27&gt;:    cmp	 $0x80000,%rax
+&lt;+33&gt;:    jne	 0x248 &lt;test4+8&gt;
+&lt;+35&gt;:    repz retq 
+</code></pre>
+<p>Now finally, we get the nice tight vectorized code we were looking 
+for.  gcc has used packed SSE instructions to add two doubles at a time.
+  It also manages to load and store two at a time, which it did do last 
+time.  The question is now that we understand what we need to tell the 
+compiler, how much more complex can the loop be before 
+auto-vectorization fails.</p>
+
+<p>Well, something that's more complex than a single loop is a double nested loop:</p>
+<pre><code>
+void test5(double * restrict a, double * restrict b)
+{
+	int i, j;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (j = 0; j &lt; SIZE; j++)
+	{
+		for (i = 0; i &lt; SIZE; i++)
+		{
+			x[i + j * SIZE] += y[i + j * SIZE];
+		}
+	}
+}
+</code></pre>
+<p>The above uses a common code idiom where a matrix is represented by a
+ block of contiguous memory.  The explicit indexing is usually hidden 
+within a macro in normal usage, but the above is what it would expand 
+out into.  Lets see how well gcc does:</p>
+<pre><code>
+&lt;+0&gt;:	  push   %r15
+&lt;+2&gt;:	  movabs $0x800000000,%rax
+&lt;+12&gt;:    lea	 0x8(%rdi),%r15
+&lt;+16&gt;:    add	 %rdi,%rax
+&lt;+19&gt;:    mov	 %rdi,%r10
+&lt;+22&gt;:    push   %r14
+&lt;+24&gt;:    mov	 %rsi,%r14
+&lt;+27&gt;:    push   %r13
+&lt;+29&gt;:    mov	 %rdi,%r13
+&lt;+32&gt;:    push   %r12
+&lt;+34&gt;:    xor	 %r12d,%r12d
+&lt;+37&gt;:    push   %rbp
+&lt;+38&gt;:    push   %rbx
+&lt;+39&gt;:    mov	 %rax,-0x10(%rsp)
+&lt;+44&gt;:    nopl   0x0(%rax)
+&lt;+48&gt;:    mov	 %r10,%rax
+&lt;+51&gt;:    shl	 $0x3c,%rax
+&lt;+55&gt;:    sar	 $0x3f,%rax
+&lt;+59&gt;:    mov	 %rax,%rdx
+&lt;+62&gt;:    and	 $0x1,%edx
+&lt;+65&gt;:    test   %rdx,%rdx
+&lt;+68&gt;:    mov	 %edx,%ecx
+&lt;+70&gt;:    je	 0x3a4 &lt;test5+308&gt;
+&lt;+76&gt;:    movsd  (%r10),%xmm0
+&lt;+81&gt;:    mov	 $0xffff,%ebx
+&lt;+86&gt;:    mov	 $0x1,%r11d
+&lt;+92&gt;:    addsd  (%rsi),%xmm0
+&lt;+96&gt;:    movsd  %xmm0,(%r10)
+&lt;+101&gt;:   mov	 $0x10000,%r9d
+&lt;+107&gt;:   and	 $0x1,%eax
+&lt;+110&gt;:   sub	 %ecx,%r9d
+&lt;+113&gt;:   mov	 %r9d,%r8d
+&lt;+116&gt;:   shr	 %r8d
+&lt;+119&gt;:   mov	 %r8d,%ebp
+&lt;+122&gt;:   add	 %ebp,%ebp
+&lt;+124&gt;:   je	 0x337 &lt;test5+199&gt;
+&lt;+126&gt;:   lea	 0x0(,%rax,8),%rcx
+&lt;+134&gt;:   xor	 %edx,%edx
+&lt;+136&gt;:   xor	 %eax,%eax
+&lt;+138&gt;:   lea	 (%r10,%rcx,1),%rdi
+&lt;+142&gt;:   add	 %rsi,%rcx
+&lt;+145&gt;:   nopl   0x0(%rax)
+&lt;+152&gt;:   movsd  (%rcx,%rax,1),%xmm1
+&lt;+157&gt;:   add	 $0x1,%edx
+&lt;+160&gt;:   movapd (%rdi,%rax,1),%xmm0
+&lt;+165&gt;:   movhpd 0x8(%rcx,%rax,1),%xmm1
+&lt;+171&gt;:   addpd  %xmm1,%xmm0
+&lt;+175&gt;:   movapd %xmm0,(%rdi,%rax,1)
+&lt;+180&gt;:   add	 $0x10,%rax
+&lt;+184&gt;:   cmp	 %r8d,%edx
+&lt;+187&gt;:   jb	 0x308 &lt;test5+152&gt;
+&lt;+189&gt;:   add	 %ebp,%r11d
+&lt;+192&gt;:   sub	 %ebp,%ebx
+&lt;+194&gt;:   cmp	 %ebp,%r9d
+&lt;+197&gt;:   je	 0x379 &lt;test5+265&gt;
+&lt;+199&gt;:   movslq %r11d,%rcx
+&lt;+202&gt;:   lea	 -0x1(%rbx),%edi
+&lt;+205&gt;:   add	 %r12,%rcx
+&lt;+208&gt;:   lea	 0x0(,%rcx,8),%rdx
+&lt;+216&gt;:   add	 %rdi,%rcx
+&lt;+219&gt;:   lea	 (%r15,%rcx,8),%rcx
+&lt;+223&gt;:   lea	 0x0(%r13,%rdx,1),%rax
+&lt;+228&gt;:   add	 %r14,%rdx
+&lt;+231&gt;:   nopw   0x0(%rax,%rax,1)
+&lt;+240&gt;:   movsd  (%rax),%xmm0
+&lt;+244&gt;:   addsd  (%rdx),%xmm0
+&lt;+248&gt;:   add	 $0x8,%rdx
+&lt;+252&gt;:   movsd  %xmm0,(%rax)
+&lt;+256&gt;:   add	 $0x8,%rax
+&lt;+260&gt;:   cmp	 %rcx,%rax
+&lt;+263&gt;:   jne	 0x360 &lt;test5+240&gt;
+&lt;+265&gt;:   add	 $0x80000,%r10
+&lt;+272&gt;:   add	 $0x80000,%rsi
+&lt;+279&gt;:   add	 $0x10000,%r12
+&lt;+286&gt;:   cmp	 -0x10(%rsp),%r10
+&lt;+291&gt;:   jne	 0x2a0 &lt;test5+48&gt;
+&lt;+297&gt;:   pop	 %rbx
+&lt;+298&gt;:   pop	 %rbp
+&lt;+299&gt;:   pop	 %r12
+&lt;+301&gt;:   pop	 %r13
+&lt;+303&gt;:   pop	 %r14
+&lt;+305&gt;:   pop	 %r15
+&lt;+307&gt;:   retq   
+&lt;+308&gt;:   mov	 $0x10000,%ebx
+&lt;+313&gt;:   xor	 %r11d,%r11d
+&lt;+316&gt;:   jmpq   0x2d5 &lt;test5+101&gt;
+</code></pre>
+<p>Ouch!  What a difference a single extra loop makes.  gcc hasn't 
+understood what we are trying to say.  Perhaps the problem here is that 
+the amount of memory accessed is larger than the size an int can touch. 
+ Lets use <code>size_t</code> as a hint that the two loop indexes can be collapsed into one.</p>
+
+<pre><code>
+void test6(double * restrict a, double * restrict b)
+{
+	size_t i, j;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (j = 0; j &lt; SIZE; j++)
+	{
+		for (i = 0; i &lt; SIZE; i++)
+		{
+			x[i + j * SIZE] += y[i + j * SIZE];
+		}
+	}
+}
+</code></pre>
+
+<pre><code>
+&lt;+0&gt;:	  push   %r12
+&lt;+2&gt;:	  mov	 %rsi,%r9
+&lt;+5&gt;:	  mov	 $0x10000,%r12d
+&lt;+11&gt;:    push   %rbp
+&lt;+12&gt;:    push   %rbx
+&lt;+13&gt;:    nopl   (%rax)
+&lt;+16&gt;:    mov	 %rdi,%rcx
+&lt;+19&gt;:    shl	 $0x3c,%rcx
+&lt;+23&gt;:    shr	 $0x3f,%rcx
+&lt;+27&gt;:    test   %rcx,%rcx
+&lt;+30&gt;:    je	 0x496 &lt;test6+214&gt;
+&lt;+36&gt;:    movsd  (%rdi),%xmm0
+&lt;+40&gt;:    mov	 $0xffff,%ebx
+&lt;+45&gt;:    mov	 $0x1,%eax
+&lt;+50&gt;:    addsd  (%r9),%xmm0
+&lt;+55&gt;:    movsd  %xmm0,(%rdi)
+&lt;+59&gt;:    mov	 $0x10000,%r11d
+&lt;+65&gt;:    sub	 %rcx,%r11
+&lt;+68&gt;:    mov	 %r11,%r10
+&lt;+71&gt;:    shr	 %r10
+&lt;+74&gt;:    mov	 %r10,%rbp
+&lt;+77&gt;:    add	 %rbp,%rbp
+&lt;+80&gt;:    je	 0x45b &lt;test6+155&gt;
+&lt;+82&gt;:    shl	 $0x3,%rcx
+&lt;+86&gt;:    xor	 %edx,%edx
+&lt;+88&gt;:    lea	 (%rdi,%rcx,1),%r8
+&lt;+92&gt;:    lea	 (%r9,%rcx,1),%rsi
+&lt;+96&gt;:    xor	 %ecx,%ecx
+&lt;+98&gt;:    nopw   0x0(%rax,%rax,1)
+&lt;+104&gt;:   movsd  (%rsi,%rdx,1),%xmm1
+&lt;+109&gt;:   add	 $0x1,%rcx
+&lt;+113&gt;:   movapd (%r8,%rdx,1),%xmm0
+&lt;+119&gt;:   movhpd 0x8(%rsi,%rdx,1),%xmm1
+&lt;+125&gt;:   addpd  %xmm1,%xmm0
+&lt;+129&gt;:   movapd %xmm0,(%r8,%rdx,1)
+&lt;+135&gt;:   add	 $0x10,%rdx
+&lt;+139&gt;:   cmp	 %r10,%rcx
+&lt;+142&gt;:   jb	 0x428 &lt;test6+104&gt;
+&lt;+144&gt;:   add	 %rbp,%rax
+&lt;+147&gt;:   sub	 %rbp,%rbx
+&lt;+150&gt;:   cmp	 %rbp,%r11
+&lt;+153&gt;:   je	 0x479 &lt;test6+185&gt;
+&lt;+155&gt;:   lea	 (%rbx,%rax,1),%rdx
+&lt;+159&gt;:   nop
+&lt;+160&gt;:   movsd  (%rdi,%rax,8),%xmm0
+&lt;+165&gt;:   addsd  (%r9,%rax,8),%xmm0
+&lt;+171&gt;:   movsd  %xmm0,(%rdi,%rax,8)
+&lt;+176&gt;:   add	 $0x1,%rax
+&lt;+180&gt;:   cmp	 %rdx,%rax
+&lt;+183&gt;:   jne	 0x460 &lt;test6+160&gt;
+&lt;+185&gt;:   add	 $0x80000,%rdi
+&lt;+192&gt;:   add	 $0x80000,%r9
+&lt;+199&gt;:   sub	 $0x1,%r12
+&lt;+203&gt;:   jne	 0x3d0 &lt;test6+16&gt;
+&lt;+209&gt;:   pop	 %rbx
+&lt;+210&gt;:   pop	 %rbp
+&lt;+211&gt;:   pop	 %r12
+&lt;+213&gt;:   retq   
+&lt;+214&gt;:   mov	 $0x10000,%ebx
+&lt;+219&gt;:   xor	 %eax,%eax
+&lt;+221&gt;:   jmpq   0x3fb &lt;test6+59&gt;
+</code></pre>
+<p>The above is a bit better (200 instead of 300 bytes of instructions),
+ but still is nowhere near where we want it to be.  It looks like gcc 
+doesn't understand that we are just iterating over the array in 
+segments.  Lets be more explicit that we touch the whole array:</p>
+
+<pre><code>
+void test7(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE * SIZE; i++)
+	{
+		x[i] += y[i];
+	}
+}
+</code></pre>
+<p>This accomplishes the exact same thing as the previous two functions, but uses one loop.  This routine is very similar to <code>test4()</code>, and we would expect gcc to do a fairly good job:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  movabs $0x800000000,%rdx
+&lt;+12&gt;:    nopl   0x0(%rax)
+&lt;+16&gt;:    movapd (%rdi,%rax,1),%xmm0
+&lt;+21&gt;:    addpd  (%rsi,%rax,1),%xmm0
+&lt;+26&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+31&gt;:    add	 $0x10,%rax
+&lt;+35&gt;:    cmp	 %rdx,%rax
+&lt;+38&gt;:    jne	 0x4c0 &lt;test7+16&gt;
+&lt;+40&gt;:    repz retq 
+</code></pre>
+<p>Indeed, it does produce what we are looking for.  So, a rule of thumb might be; two loops bad, one loop good.</p>
+
+<p>We have used addition in the above because it is both a C operator, 
+and a vectorizable instruction.  Lets see what happens when we try to 
+use something that should vectorize, but doesn't directly correspond to a
+ C operator.  A simple example is the <code>max()</code> operation:</p>
+<pre><code>
+void test8(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		/* max() */
+		if (y[i] &gt; x[i]) x[i] = y[i];
+	}
+}
+</code></pre>
+<p>This produces:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movsd  (%rsi,%rax,8),%xmm0
+&lt;+13&gt;:    ucomisd (%rdi,%rax,8),%xmm0
+&lt;+18&gt;:    jbe	 0x4f9 &lt;test8+25&gt;
+&lt;+20&gt;:    movsd  %xmm0,(%rdi,%rax,8)
+&lt;+25&gt;:    add	 $0x1,%rax
+&lt;+29&gt;:    cmp	 $0x10000,%rax
+&lt;+35&gt;:    jne	 0x4e8 &lt;test8+8&gt;
+&lt;+37&gt;:    repz retq 
+</code></pre>
+<p>And there is no vectorization at all.  What has gone wrong?  The 
+problem here is the C memory model.  gcc isn't allowed to introduce 
+extra writes to a memory location.  If some other thread modifies x[] 
+while the above routine is called, then those extra writes could stomp 
+on modifications.  We need a way to tell gcc that using the vectorized 
+max() instruction is okay.  Fortunately, this isn't too hard, we just 
+use a non-conditional write:</p>
+
+<pre><code>
+void test9(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		/* max() */
+		x[i] = ((y[i] &gt; x[i]) ? y[i] : x[i]);
+	}
+}
+</code></pre>
+<p>Which produces:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movapd (%rsi,%rax,1),%xmm0
+&lt;+13&gt;:    maxpd  (%rdi,%rax,1),%xmm0
+&lt;+18&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+23&gt;:    add	 $0x10,%rax
+&lt;+27&gt;:    cmp	 $0x80000,%rax
+&lt;+33&gt;:    jne	 0x518 &lt;test9+8&gt;
+&lt;+35&gt;:    repz retq 
+</code></pre>
+<p>This code looks like the vectorized code for addition, and we didn't 
+have to use any SSE-explicit intrinsic to do so.  gcc has 
+pattern-matched the operation and found the instruction we are looking 
+for, which is very encouraging.</p>
+
+<p>So what happens when we try something a little more complex, like a conditional add?</p>
+<pre><code>
+void test10(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		/* conditional add */
+		x[i] = ((y[i] &gt; x[i]) ? x[i] + y[i] : x[i]);
+	}
+}
+</code></pre>
+<p>This produces:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movsd  (%rsi,%rax,8),%xmm1
+&lt;+13&gt;:    movsd  (%rdi,%rax,8),%xmm0
+&lt;+18&gt;:    ucomisd %xmm0,%xmm1
+&lt;+22&gt;:    jbe	 0x55c &lt;test10+28&gt;
+&lt;+24&gt;:    addsd  %xmm1,%xmm0
+&lt;+28&gt;:    movsd  %xmm0,(%rdi,%rax,8)
+&lt;+33&gt;:    add	 $0x1,%rax
+&lt;+37&gt;:    cmp	 $0x10000,%rax
+&lt;+43&gt;:    jne	 0x548 &lt;test10+8&gt;
+&lt;+45&gt;:    repz retq 
+</code></pre>
+<p>Which is unfortunately not vectorized.  Perhaps our expression is too complex, so lets try the simpler version:</p>
+<pre><code>
+void test11(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		/* conditional add */
+		x[i] += ((y[i] &gt; x[i]) ? y[i] : 0);
+	}
+}
+</code></pre>
+<p>This produces:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movapd (%rdi,%rax,1),%xmm1
+&lt;+13&gt;:    movapd (%rsi,%rax,1),%xmm2
+&lt;+18&gt;:    movapd %xmm1,%xmm0
+&lt;+22&gt;:    cmpltpd %xmm2,%xmm0
+&lt;+27&gt;:    andpd  %xmm2,%xmm0
+&lt;+31&gt;:    addpd  %xmm1,%xmm0
+&lt;+35&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+40&gt;:    add	 $0x10,%rax
+&lt;+44&gt;:    cmp	 $0x80000,%rax
+&lt;+50&gt;:    jne	 0x578 &lt;test11+8&gt;
+&lt;+52&gt;:    repz retq
+</code></pre>
+<p>So the form of the expression matters.  In this case, a different 
+rearrangement of an expression was vectorizable.  In general, the 
+simpler the expression, the greater the chance of auto-vectorization.</p>
+
+<p>All of the above have had fixed-length loops.  What happens if the loop exit condition is more complex:</p>
+<pre><code>
+void test12(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		/* early stop */
+		if (x[i] &lt; y[i]) break;
+
+		x[i] += y[i];
+	}
+}
+</code></pre>
+<p>Where here we can exit early if the (hopefully vectorizable) condition occurs.  Unfortunately, gcc produces:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  jmp	 0x5cd &lt;test12+29&gt;
+&lt;+4&gt;:	  nopl   0x0(%rax)
+&lt;+8&gt;:	  addsd  %xmm1,%xmm0
+&lt;+12&gt;:    movsd  %xmm0,(%rdi,%rax,8)
+&lt;+17&gt;:    add	 $0x1,%rax
+&lt;+21&gt;:    cmp	 $0x10000,%rax
+&lt;+27&gt;:    je	 0x5dd &lt;test12+45&gt;
+&lt;+29&gt;:    movsd  (%rdi,%rax,8),%xmm1
+&lt;+34&gt;:    movsd  (%rsi,%rax,8),%xmm0
+&lt;+39&gt;:    ucomisd %xmm1,%xmm0
+&lt;+43&gt;:    jbe	 0x5b8 &lt;test12+8&gt;
+&lt;+45&gt;:    repz retq 
+</code></pre>
+<p>Where the above obviously isn't vectorized.  For some reason gcc 
+isn't using a compare followed by a move-mask to determine if the loop 
+can exit early, whilst maintaining the ability to do two adds at a time.</p>
+
+<p>In all the above, we have used simple indexing, lets see what happens if we make it more complex:</p>
+<pre><code>
+void test13(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] = y[i] + y[i + 1];
+	}
+}
+</code></pre>
+<p>This compiles into:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movsd  0x8(%rsi,%rax,1),%xmm1
+&lt;+14&gt;:    movapd (%rsi,%rax,1),%xmm0
+&lt;+19&gt;:    movhpd 0x10(%rsi,%rax,1),%xmm1
+&lt;+25&gt;:    addpd  %xmm1,%xmm0
+&lt;+29&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+34&gt;:    add	 $0x10,%rax
+&lt;+38&gt;:    cmp	 $0x80000,%rax
+&lt;+44&gt;:    jne	 0x5e8 &lt;test13+8&gt;
+&lt;+46&gt;:    repz retq
+</code></pre>
+<p>This is half-vectorized.  Instead of using an unaligned load 
+instruction, gcc has used two half-load instructions for the upper and 
+lower halves of <code>%xmm1</code>.  The unaligned-load is probably better.  Another possibility is to use pipelined aligned loads followed by shuffles.</p>
+
+<p>If we switch to an even offset, gcc no longer needs to do unaligned accesses, and switches back to full vectorization:</p>
+<pre><code>
+void test14(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] = y[i] + y[i + 2];
+	}
+}
+</code></pre>
+<p>giving</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movapd (%rsi,%rax,1),%xmm0
+&lt;+13&gt;:    addpd  0x10(%rsi,%rax,1),%xmm0
+&lt;+19&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+24&gt;:    add	 $0x10,%rax
+&lt;+28&gt;:    cmp	 $0x80000,%rax
+&lt;+34&gt;:    jne	 0x618 &lt;test14+8&gt;
+&lt;+36&gt;:    repz retq 
+</code></pre>
+<p>So the quality of the code gcc produces can subtly depend on which 
+index offsets are used.  Confirming this is the simpler routine:</p>
+
+<pre><code>
+void test15(double * restrict a, double * restrict b)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] = y[i + 1];
+	}
+}
+</code></pre>
+<p>which gives:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movsd  0x8(%rsi,%rax,1),%xmm1
+&lt;+14&gt;:    movhpd 0x10(%rsi,%rax,1),%xmm1
+&lt;+20&gt;:    movapd %xmm1,(%rdi,%rax,1)
+&lt;+25&gt;:    add	 $0x10,%rax
+&lt;+29&gt;:    cmp	 $0x80000,%rax
+&lt;+35&gt;:    jne	 0x648 &lt;test15+8&gt;
+&lt;+37&gt;:    repz retq 
+</code></pre>
+<p>Where again the half-loads appear.</p>
+
+<p>Everything so far has used two input arrays.  What does gcc do with more?</p>
+<pre><code>
+void test16(double * restrict a, double * restrict b, double * restrict c)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+	double *z = __builtin_assume_aligned(c, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] = y[i] + z[i];
+	}
+}
+</code></pre>
+<p>Which when compiled, gives:</p>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movapd (%rsi,%rax,1),%xmm0
+&lt;+13&gt;:    addpd  (%rdx,%rax,1),%xmm0
+&lt;+18&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+23&gt;:    add	 $0x10,%rax
+&lt;+27&gt;:    cmp	 $0x80000,%rax
+&lt;+33&gt;:    jne	 0x678 &lt;test16+8&gt;
+&lt;+35&gt;:    repz retq 
+</code></pre>
+<p>This is good, fully vectorized code.</p>
+
+<p>How about something more complex, like our max function implementation?</p>
+<pre><code>
+void test17(double * restrict a, double * restrict b, double * restrict c)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+	double *z = __builtin_assume_aligned(c, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] = ((y[i] &gt; z[i]) ? y[i] : z[i]);
+	}
+}
+</code></pre>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movapd (%rsi,%rax,1),%xmm0
+&lt;+13&gt;:    maxpd  (%rdx,%rax,1),%xmm0
+&lt;+18&gt;:    movapd %xmm0,(%rdi,%rax,1)
+&lt;+23&gt;:    add	 $0x10,%rax
+&lt;+27&gt;:    cmp	 $0x80000,%rax
+&lt;+33&gt;:    jne	 0x6a8 &lt;test17+8&gt;
+&lt;+35&gt;:    repz retq 
+</code></pre>
+<p>Which again works nicely.</p>
+
+<p>So, now that we have a third array, lets use it within the expression on the right:</p>
+<pre><code>
+void test18(double * restrict a, double * restrict b, double * restrict c)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+	double *z = __builtin_assume_aligned(c, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		x[i] = ((y[i] &gt; z[i]) ? x[i] : z[i]);
+	}
+}
+</code></pre>
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movsd  (%rdx,%rax,8),%xmm0
+&lt;+13&gt;:    movsd  (%rsi,%rax,8),%xmm1
+&lt;+18&gt;:    ucomisd %xmm0,%xmm1
+&lt;+22&gt;:    jbe	 0x6ed &lt;test18+29&gt;
+&lt;+24&gt;:    movsd  (%rdi,%rax,8),%xmm0
+&lt;+29&gt;:    movsd  %xmm0,(%rdi,%rax,8)
+&lt;+34&gt;:    add	 $0x1,%rax
+&lt;+38&gt;:    cmp	 $0x10000,%rax
+&lt;+44&gt;:    jne	 0x6d8 &lt;test18+8&gt;
+&lt;+46&gt;:    repz retq 
+</code></pre>
+<p>Ooops, no vectorization here.  It looks like a conditional store is a
+ bit too complex.  How about if we make it a bit simpler, using an if 
+statement instead:</p>
+
+<pre><code>
+void test19(double * restrict a, double * restrict b, double * restrict c)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double *y = __builtin_assume_aligned(b, 16);
+	double *z = __builtin_assume_aligned(c, 16);
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		if (y[i] &lt;= z[i]) x[i] = z[i];
+	}
+}
+</code></pre>
+
+<pre><code>
+&lt;+0&gt;:	  xor	 %eax,%eax
+&lt;+2&gt;:	  nopw   0x0(%rax,%rax,1)
+&lt;+8&gt;:	  movsd  (%rdx,%rax,8),%xmm0
+&lt;+13&gt;:    ucomisd (%rsi,%rax,8),%xmm0
+&lt;+18&gt;:    jb	 0x719 &lt;test19+25&gt;
+&lt;+20&gt;:    movsd  %xmm0,(%rdi,%rax,8)
+&lt;+25&gt;:    add	 $0x1,%rax
+&lt;+29&gt;:    cmp	 $0x10000,%rax
+&lt;+35&gt;:    jne	 0x708 &lt;test19+8&gt;
+&lt;+37&gt;:    repz retq 
+</code></pre>
+<p>This is a bit tighter code, but it still isn't vectorized.  We may 
+need to go to intrinsics to get something like the output from <code>test11()</code>.
+
+</p><p>Finally, lets look at operations that scan over an array, and 
+collate a single output.  gcc should be able to vectorize these as well.</p>
+
+<pre><code>
+double test20(double * restrict a)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double y = -INFINITY;
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		if (x[i] &gt; y) y = x[i];
+	}
+
+	return y;
+}
+</code></pre>
+
+<pre><code>
+&lt;+0&gt;:	  movsd  0x0(%rip),%xmm0		# y
+&lt;+8&gt;:	  xor	 %eax,%eax
+&lt;+10&gt;:    nopw   0x0(%rax,%rax,1)
+&lt;+16&gt;:    movsd  (%rdi,%rax,8),%xmm1
+&lt;+21&gt;:    add	 $0x1,%rax
+&lt;+25&gt;:    cmp	 $0x10000,%rax
+&lt;+31&gt;:    maxsd  %xmm0,%xmm1
+&lt;+35&gt;:    movapd %xmm1,%xmm0
+&lt;+39&gt;:    jne	 0x740 &lt;test20+16&gt;
+&lt;+41&gt;:    repz retq
+</code></pre>
+<p>Unfortunately, this global maximum operation isn't vectorized.  Lets 
+see a simpler function that calculates a global sum instead:</p>
+
+<pre><code>
+double test21(double * restrict a)
+{
+	size_t i;
+
+	double *x = __builtin_assume_aligned(a, 16);
+	double y = 0;
+
+	for (i = 0; i &lt; SIZE; i++)
+	{
+		y += x[i];
+	}
+
+	return y;
+}
+</code></pre>
+<p>Which produces:</p>
+<pre><code>
+&lt;+0&gt;:	  xorpd  %xmm0,%xmm0
+&lt;+4&gt;:	  xor	 %eax,%eax
+&lt;+6&gt;:	  nopw   %cs:0x0(%rax,%rax,1)
+&lt;+16&gt;:    addsd  (%rdi,%rax,8),%xmm0
+&lt;+21&gt;:    add	 $0x1,%rax
+&lt;+25&gt;:    cmp	 $0x10000,%rax
+&lt;+31&gt;:    jne	 0x770 &lt;test21+16&gt;
+&lt;+33&gt;:    repz retq 
+</code></pre>
+<p>Which also isn't vectorized.  What is going on?  The problem here is 
+that gcc isn't allowed to re-order the operations we give it.  Even 
+though the maximum operation, and the addition operation are associative
+ with real numbers, they aren't with floating point numbers.  (Consider 
+what happens with signed zeros, for example.)</p>
+
+<p>We need to tell gcc that re-ordering operations is okay with us.  To 
+do this, we need to add another compile-time flag, "--fast-math".  If we
+ do this, we find that the output from functions 20 and 21 are improved:</p>
+
+<pre><code>
+&lt;+0&gt;:	  lea	 0x80000(%rdi),%rax
+&lt;+7&gt;:	  movapd 0x0(%rip),%xmm0		# 0x75f &lt;test20+15&gt;
+&lt;+15&gt;:    nop
+&lt;+16&gt;:    maxpd  (%rdi),%xmm0
+&lt;+20&gt;:    add	 $0x10,%rdi
+&lt;+24&gt;:    cmp	 %rax,%rdi
+&lt;+27&gt;:    jne	 0x760 &lt;test20+16&gt;
+&lt;+29&gt;:    movapd %xmm0,%xmm1
+&lt;+33&gt;:    unpckhpd %xmm0,%xmm0
+&lt;+37&gt;:    maxsd  %xmm1,%xmm0
+&lt;+41&gt;:    retq 
+</code></pre>
+<p>gcc is very intelligent, and does a vectorized maximum calculation, followed by a horizontal maximum at the end.</p>
+
+<pre><code>
+&lt;+0&gt;:	  xorpd  %xmm1,%xmm1
+&lt;+4&gt;:	  lea	 0x80000(%rdi),%rax
+&lt;+11&gt;:    nopl   0x0(%rax,%rax,1)
+&lt;+16&gt;:    addpd  (%rdi),%xmm1
+&lt;+20&gt;:    add	 $0x10,%rdi
+&lt;+24&gt;:    cmp	 %rax,%rdi
+&lt;+27&gt;:    jne	 0x790 &lt;test21+16&gt;
+&lt;+29&gt;:    movapd %xmm1,%xmm2
+&lt;+33&gt;:    unpckhpd %xmm2,%xmm2
+&lt;+37&gt;:    movapd %xmm2,%xmm0
+&lt;+41&gt;:    addsd  %xmm1,%xmm0
+&lt;+45&gt;:    retq 
+</code></pre>
+<p>And again gcc manages to vectorize the summation, even with having to do a horizontal add at the end.</p>
+
+<h3>Summary</h3>
+<p>gcc is very good, and can auto-vectorize many inner loops.  However, 
+if the expressions get too complex, vectorization will fail.  gcc also 
+may not be able to get the most optimal form of the loop kernel.  In 
+general, the simpler the code, the more likely gcc is to give good 
+results.</p>
+
+<p>However, you cannot expect gcc to give what you expect without a few 
+tweaks.  You may need to add the "--fast-math" to turn on associativity.
+  You will definitely need to tell the compiler about alignment and 
+array-overlap considerations to get good code.</p>
+
+<p>On the other hand, gcc will still attempt to vectorize code which 
+hasn't had changes done to it at all.  It just won't be able to get 
+nearly as much of a performance improvement as you might hope.</p>
+
+<p>However, as time passes, more inner loop patterns will be added to 
+the vectorizable list.  Thus if you are using later versions of gcc, 
+don't take the above results for granted.  Check the output of the 
+compiler yourself to see if it is behaving as you might expect.  You 
+might be pleasantly surprised by what it can do.</p>
+
+<div class="comments">
+<h2>Comments</h2>
+
+<form name="input" action="/web/20120420075252/https://locklessinc.com/cgi-bin/comments.cgi" method="post">
+<img src="Auto-vectorization%20with%20gcc%204.7_files/captcha.png" alt=""><br>
+<input type="hidden" name="Hash" value="CxCNtBdgzgMe">
+<input type="hidden" name="page" value="vectorize">
+<input type="hidden" name="page_hash" value="MC0BF795D16X117VIKWU5M07X">
+Enter the 10 characters above here <input type="text" name="captcha"><br><br>
+<textarea name="comments" rows="20" cols="80">Enter your comments here</textarea><br>
+Name<input type="text" name="name"><br>
+<input type="submit" value="Submit">
+</form>
+
+</div>
+
+<ul class="bread">
+<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/">Lockless</a></li>
+<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/articles/">Articles</a></li>
+<li><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/articles/vectorize/">Auto-vectorization with gcc 4.7</a></li>
+</ul>
+
+		</td>
+	</tr>
+</tbody></table>
+
+<div class="menu_1holder">
+<table class="menu_1" cellpadding="0" cellspacing="0" border="0">
+<tbody><tr>
+	<td valign="bottom" align="center"><table cellpadding="0" cellspacing="0"><tbody><tr>
+		<td><table cellpadding="0" cellspacing="0"><tbody><tr>
+			<td width="1%">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/linux.shtml" title="Linux"><img src="Auto-vectorization%20with%20gcc%204.7_files/menu1_divider_left.gif" border="0" alt=""></a>
+			</td>
+			<td class="menu_td" align="center">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/linux.shtml" title="Linux">Linux</a>
+			</td>
+			<td width="1%">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/linux.shtml" title="Linux"><img src="Auto-vectorization%20with%20gcc%204.7_files/menu1_divider_right.gif" border="0" alt=""></a>
+			</td>
+		</tr></tbody></table></td>
+		<td><table cellpadding="0" cellspacing="0"><tbody><tr>
+			<td width="1%">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/windows.shtml" title="Windows"><img src="Auto-vectorization%20with%20gcc%204.7_files/menu1_divider_left.gif" border="0" alt=""></a>
+			</td>
+			<td class="menu_td" align="center">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/windows.shtml" title="Windows">Windows</a>
+			</td>
+			<td width="1%">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/windows.shtml" title="Windows"><img src="Auto-vectorization%20with%20gcc%204.7_files/menu1_divider_right.gif" border="0" alt=""></a>
+			</td>
+		</tr></tbody></table></td>
+		<td><table cellpadding="0" cellspacing="0"><tbody><tr>
+			<td width="1%">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/developers.shtml" title="Developers"><img src="Auto-vectorization%20with%20gcc%204.7_files/menu1_divider_left.gif" border="0" alt=""></a>
+			</td>
+			<td class="menu_td" align="center">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/developers.shtml" title="Developers">Developers</a>
+			</td>
+			<td width="1%">
+				<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/developers.shtml" title="Developers"><img src="Auto-vectorization%20with%20gcc%204.7_files/menu1_divider_right.gif" border="0" alt=""></a>
+			</td>
+		</tr></tbody></table></td>
+	</tr></tbody></table></td>
+</tr>
+</tbody></table>
+</div>
+
+<table class="footer1" cellpadding="0" cellspacing="0">
+<tbody><tr>
+	<td><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/about.shtml">About Us</a></td>
+	<td><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/returns.shtml">Returns Policy</a></td>
+	<td><a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/privacy.shtml">Privacy Policy</a></td>
+	<td><a href="https://web.archive.org/web/20120420075252/mailto:support@locklessinc.com?subject=Customer%20Feedback%20for%20www.locklessinc.com">Send us Feedback</a></td>
+</tr>
+</tbody></table>
+<table class="footer2" cellspacing="0" cellpadding="0"><tbody><tr> 
+    <td valign="top" align="center"> 
+    <a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/about.shtml">Company Info</a> |
+	<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/products/">Product Index</a> |
+	<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/cindex.shtml">Category Index</a> |
+	<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/help.shtml">Help</a> |
+	<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/terms.shtml">Terms of Use</a>
+	<br>
+	<a href="https://web.archive.org/web/20120420075252/https://locklessinc.com/terms.shtml">Copyright ©
+		<script type="text/javascript">document.write((new Date()).getFullYear());</script>2012
+	Lockless Inc&nbsp;All Rights Reserved.</a>
+	</td>
+</tr></tbody></table>
+
+<div class="cart">
+	<a href="https://web.archive.org/web/20120420075252/https://www.cartsquare.net/cgi-bin/cart.cgi?UserLogin=locklessinc&amp;CheckOut=Online&amp;CartID=locklessinc"><img src="Auto-vectorization%20with%20gcc%204.7_files/myaccount.gif" align="top" border="0" alt="">My Account</a>
+	<a href="https://web.archive.org/web/20120420075252/https://www.cartsquare.net/cgi-bin/cart.cgi?ViewCart=locklessinc"><img src="Auto-vectorization%20with%20gcc%204.7_files/viewcart.gif" align="top" border="0" alt="">View Cart</a>&nbsp;&nbsp;
+</div>
+
+
+
+
+</body></html>
+<!--
+     FILE ARCHIVED ON 07:52:52 Apr 20, 2012 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 19:02:31 Apr 09, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  captures_list: 0.465
+  exclusion.robots: 0.023
+  exclusion.robots.policy: 0.013
+  esindex: 0.008
+  cdx.remote: 8.277
+  LoadShardBlock: 1505.415 (3)
+  PetaboxLoader3.datanode: 87.571 (5)
+  PetaboxLoader3.resolve: 2649.308 (3)
+  load_resource: 1524.251 (2)
+-->

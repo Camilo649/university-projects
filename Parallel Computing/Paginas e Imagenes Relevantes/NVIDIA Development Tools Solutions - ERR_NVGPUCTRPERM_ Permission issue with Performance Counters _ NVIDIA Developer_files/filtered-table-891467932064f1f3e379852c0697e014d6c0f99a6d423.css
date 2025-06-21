@@ -1,0 +1,39 @@
+.nvidia-filtered-table-wrapper tbody tr td {
+  word-break: break-word;
+}
+
+.nvidia-filtered-table-wrapper .grd_headTblCont th {
+  overflow: visible !important;
+  text-overflow: inherit !important;
+}
+
+.nvidia-filtered-table-wrapper tbody tr td .product-link {
+  text-align: center;
+  display: inline-block;
+}
+
+.nvidia-filtered-table-wrapper tbody tr td  .product-title {
+  font-weight: bold;
+  padding-top: 5px;
+}
+
+.nvidia-filtered-table-wrapper .element-invisible {
+  display: none;
+}
+
+.nvidia-filtered-table-wrapper .nextPage {
+  background: transparent url(/assets/devzone3/nvidia-filtered-table/btn_next_page-974c5ef3167fc230341835c1ba2acd2f937bfc6ba62f029f859ae89b01ccb999.gif) center center no-repeat !important;
+}
+
+.nvidia-filtered-table-wrapper .previousPage {
+  background: transparent url(/assets/devzone3/nvidia-filtered-table/btn_previous_page-647745f5c806ea0550ca75e1fc8f50c0543684de4a1f03812903a01030dddb61.gif) center center no-repeat !important;
+}
+
+.nvidia-filtered-table-wrapper .firstPage {
+  background: transparent url(/assets/devzone3/nvidia-filtered-table/btn_first_page-b99d18216b92484ab47099955a6d68b53979d272746abd331e7071f9777dd560.gif) center center no-repeat !important;
+}
+
+.nvidia-filtered-table-wrapper .lastPage {
+  background: transparent url(/assets/devzone3/nvidia-filtered-table/btn_last_page-d81dd7148a6e80127ee597128387430ba003b5c19d158e140727c901da6f085d.gif) center center no-repeat !important;
+
+}

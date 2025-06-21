@@ -1,0 +1,65 @@
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4) url(/../images/preloader-white-64.gif) no-repeat center center;
+  z-index: 2;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content {
+  padding-top: 10px;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product {
+  padding-top: 20px;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link {
+  margin-top: 30px;
+}
+@media (min-width: 768px) {
+  #nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link {
+    margin-top: 15px;
+  }
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a {
+  border: 1px solid #ebebeb;
+  padding: 15px 25px 10px;
+  text-decoration: none !important;
+  text-align: center;
+  display: block;
+  transition: all 0.2s ease-in-out;
+  font-size: 14px;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a span {
+  display: block;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a span,
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a img {
+  transition: all 0.2s ease-in-out;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a img {
+  max-height: 22px;
+  margin: auto;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a:hover {
+  border: 1px solid #76b900;
+  cursor: pointer;
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a:hover span,
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-link a:hover img {
+  transform: scale(1.05);
+}
+#nvidia-buy-jetson-content .buy-jetson-content-wrapper .buy-jetson-content .jetson-product .jetson-links-wrapper .jetson-buy-note {
+  margin-top: 1em;
+}
+nav.navbar #navbar-collapse > ul.menu > li:last-child:not(.dropdown) > a {
+  color: #77b820;
+}
+nav.navbar #navbar-collapse > ul.menu > li:last-child:not(.dropdown) > a:hover {
+  color: #fff;
+}

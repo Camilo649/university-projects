@@ -1,0 +1,632 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us" id="sixapart-standard"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="imagetoolbar" content="no">    
+    <title>Demystifying The Restrict Keyword - CellPerformance</title>
+    <meta name="generator" content="Movable Type Pro 4.3-en">
+    
+
+    
+        
+        
+        
+        
+        
+        
+        <link rel="stylesheet" href="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/styles.css" type="text/css">
+        <link rel="alternate" type="application/atom+xml" title="Atom" href="https://cellperformance.beyond3d.com/articles/atom.xml">
+        <link rel="start" href="https://cellperformance.beyond3d.com/articles/index.html" title="Home">
+        <script type="text/javascript" src="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/mt.js"></script>
+        
+    
+
+
+    
+    <link rel="prev bookmark" href="https://cellperformance.beyond3d.com/articles/2006/04/avoiding-microcoded-instructions-on-the-ppu.html" title="Avoiding Microcoded Instructions On The PPU">
+    <link rel="next bookmark" href="https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html" title="Understanding Strict Aliasing">
+    
+    
+
+    
+    <script type="text/javascript">
+    /* <![CDATA[ */
+    mtAttachEvent('load', mtUpdateScores);
+    mtAttachEvent('usersignin', mtUpdateScores);
+    /* ]]> */
+    </script>
+</head>
+<body id="mt-community-blog" class="mt-entry-archive layout-wm">
+    <div id="container">
+        <div id="container-inner">
+            <div id="header">
+                <div id="header-inner">
+                    <div id="header-content">
+
+                        <div id="header-name"><a href="https://cellperformance.beyond3d.com/articles/index.html" accesskey="1">CellPerformance</a></div>
+    
+                        <div id="header-description">Sharing tips and experience with the cell processor, performance, data design and game programming.</div>
+    
+
+                   </div>
+                </div>
+            </div>
+            <div id="content">
+                <div id="content-inner">
+                    <div id="alpha">
+                        <div id="alpha-inner">
+
+
+
+<div id="entry-4" class="entry-asset asset hentry">
+    <div class="asset-header">
+        <h1 id="page-title" class="asset-name entry-title">Demystifying The Restrict Keyword</h1>
+        <div class="asset-meta">
+    <span class="byline">
+
+        By Mike Acton on <abbr class="published" title="2006-05-29T22:38:59-08:00">May 29, 2006 10:38 PM</abbr>
+
+    </span>
+</div>
+
+
+    </div>
+    <div class="asset-content entry-content">
+
+        <div class="asset-body">
+            <div class="sticky-note"><strong>
+UPDATED! More examples! More detailed explainations! </strong></div>
+<div class="subtitle">Contract</div>
+The restrict keyword can be considered an extension to the strict
+aliasing rule. It allows the programmer to declare that pointers which
+share the same type (or were otherwise validly created) <b>do not</b>
+alias eachother. By using restrict the programmer can declare that any
+loads and stores through the qualified pointer (or through another
+pointer copied either directly or indirectly from the restricted
+pointer) are the <b>only</b> loads and stores to the same address
+during the lifetime of the pointer. In other words, the pointer is not
+aliased by any pointers other than its own copies.<br>
+<br>
+<div class="rule-of-thumb">
+Restrict is a "no data hazards will be generated" contract between the
+programmer and the compiler. The compiler relies on this information to
+make optimizations. If the data is, in fact, aliased, the results are
+undefined and a programmer should not expect the compiler to output a
+warning. The compiler assumes the programmer is not <i>lying</i>.</div>
+<br>
+<br>
+<div class="contract-header">THE RESTRICT CONTRACT</div>
+<div class="contract">
+I, [insert your name], a PROFESSIONAL or AMATEUR [circle one] programmer recognize that there are
+limits to what a compiler can do. I certify that, to the best of my knowledge, there are no magic
+elves or monkeys in the compiler which through the forces of fairy dust can always make code faster.
+I understand that there are some problems for which there is not enough information to solve. I 
+hereby declare that given the opportunity to provide the compiler with sufficient information,
+perhaps through some key word, I will gladly use said keyword and not bitch and moan about how 
+"the compiler should be doing this for me."<br>
+<br>
+In this case, I promise that the pointer declared along with the restrict qualifier is not aliased.
+I certify that writes through this pointer will not effect the values read through any other pointer
+available in the same context which is also declared as restricted.<br>
+<br>
+* Your agreement to this contract is implied by use of the restrict keyword ;)
+</div>
+<br>
+<br>
+Read on for more information on the practical use and benefits to using the restrict keyword...
+            
+        </div>
+
+
+        <div id="more" class="asset-more">
+            <div class="subtitle">Restrict is a type qualifier</div>
+
+<div class="quote"> A new feature of C99: The restrict type qualifier
+allows programs to be written so that translators can produce
+significantly faster executables. [...] Anyone for whom this is not a
+concern can safely ignore this feature of the language.</div>
+<div class="quote-cite"> -- <a href="http://std.dkuug.dk/JTC1/SC22/WG14/www/C99RationaleV5.10.pdf">From Rationale for International Standard - Programming Languages - C [std.dkuug.dk]</a> (6.7.3.1 Formal definition of restrict)</div>
+<br>
+
+The restrict keyword is a type qualifier for pointers and is a formal part of the C99 standard.<br>
+<br>
+Example usage:
+<div class="code">
+int* restrict foo;
+</div>
+Notice that the restrict keyword qualifies the pointer and not the object being pointed to.
+
+<div class="sticky-note">
+Not all compilers are compliant with the C99 standard. For example Microsoft's compiler, does not support the C99 standard <i>at all</i>. If you are using MSVC on a x86 platform you will not have access to this critical optimization option.<br>
+</div>
+
+<div class="sticky-note">
+When using GCC, remember to enable the C99 standard by adding <b>-std=c99</b> to your compilation flags. In code that cannot be compiled with C99, use either <b>__restrict</b> or <b>__restrict__</b> to enable the keyword as a GCC extension.<br>
+</div>
+
+<div class="sticky-note">
+The restrict keyword was not included as part of the C++98 standard. However some C++ compilers <i>may</i> support it as an extension. It's important that when restrict is used in C++ to remember that the implicit <i>this</i> pointer should also be restricted. Consult your compiler's manual for how to do this, if possible.
+</div>
+
+<div class="rule-of-thumb">An understanding the <a href="https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html">strict aliasing rule</a> will provide good context for  problems related to the restrict keyword. </div>
+
+<div class="subtitle">Why was restrict introduced into C99?</div>
+<div class="quote">
+The problem that the restrict qualifier addresses is that potential
+aliasing can inhibit optimizations. Specifically, if a translator
+cannot determine that two different pointers are being used to
+reference different objects, then it cannot apply optimizations such as
+maintaining the values of the objects in registers rather than in
+memory, or reordering loads and stores of these values. This problem
+can have a significant effect on a program that, for example, performs
+arithmetic calculations on large arrays of numbers. The effect can be
+measured by comparing a program that uses pointers with a similar
+program that uses file scope arrays (or with a similar Fortran
+program). The array version can run faster by a factor of ten or more
+on a system with vector processors. Where such large performance gains
+are possible, implementations have of course offered their own
+solutions, usually in the form of compiler directives that specify
+particular optimizations. Differences in the spelling, scope, and
+precise meaning of these directives have made them troublesome to use
+in a program that must run on many different systems. This was the
+motivation for a standard solution.</div>
+<div class="quote-cite"> -- <a href="http://std.dkuug.dk/JTC1/SC22/WG14/www/C99RationaleV5.10.pdf">From Rationale for International Standard - Programming Languages - C [std.dkuug.dk]</a> (6.7.3.1 Formal definition of restrict)</div>
+<br>
+In other words, proper use of the restrict keyword gives the compiler
+enough information to select a more optimal order of loads and stores
+to/from memory and to potentially make better use of registers to store
+non-aliased objects.<br>
+
+<div class="subtitle">Non-aliased Memory Windows</div>
+
+Given the following structure, there is a significant difference in performance in even the smallest update loops.
+
+<pre class="code">typedef struct vector3  vector3;<br><br>struct vector3<br>{<br>  float x;<br>  float y;<br>  float z;<br>};<br></pre>
+What follows is a simple example function that updates some "particles"
+with unrestricted pointers. Note that the pointers share the same type,
+so the compiler will assume they can be aliased, per the strict
+aliasing rule.
+<div class="sticky-note">The example code sections in the article are
+not meant to serve as examples of real production code, but rather as
+examples of real <em>patterns</em> often found in production code.</div>
+
+<pre class="code">void<br>move( vector3* velocity, <br>      vector3* position, <br>      vector3* acceleration, <br>      float    time_step, <br>      size_t   count )<br>{<br>  for (size_t i=0;i&lt;count;i++)<br>  {<br>    velocity[i].x += acceleration[i].x * time_step;<br>    velocity[i].y += acceleration[i].y * time_step;<br>    velocity[i].z += acceleration[i].z * time_step;<br>    position[i].x += velocity[i].x     * time_step;<br>    position[i].y += velocity[i].y     * time_step;<br>    position[i].z += velocity[i].z     * time_step;<br>  }<br>}<br></pre>
+<br>
+
+<div class="sticky-note">This article will examine the assembly output
+generated for the PowerPC. However, the principles and suggestions
+presented are applicable to many common architectures.</div>
+<pre class="code"># This code was compiled with GCC 3.4.1 for PowerPC,<br># with the following options: <b>-O3 -fstrict-aliasing -std=c99</b><br>#<br>move:<br>  cmpwi  0,6,0<br>  stwu   1,-16(1)<br>  beq-   0,.L7<br>  li     8,0<br>  mtctr  6<br>.L8:<br>  add    9,8,3<br>  lfsx   13,8,5<br>  add    10,8,5<br>  lfsx   0,8,3<br>  lfs    8,4(9)<br>  add    11,8,4<br>  lfs    5,8(10)<br>  lfs    7,4(10)<br>  lfs    6,8(9)<br>  fmadds 4,13,1,0<br>  fmadds 3,7,1,8<br>  fmadds 2,5,1,6<br>  <span style="color: rgb(255, 0, 0);">stfsx  4,8,3      # Store velocity_x<br>  stfs   3,4(9)     # Store velocity_y<br>  stfs   2,8(9)     # Store velocity_z</span><br>  <span style="color: rgb(0, 0, 255);">lfsx   11,8,4     # Load position_x<br>  lfs    10,4(11)   # Load position_y<br>  lfs    9,8(11)    # Load position_z</span><br>  fmadds 12,4,1,11<br>  fmadds 0,3,1,10<br>  fmadds 13,2,1,9<br>  stfsx  12,8,4<br>  addi   8,8,12<br>  stfs   0,4(11)<br>  stfs   13,8(11)<br>  bdnz   .L8<br>.L7:<br>  addi   1,1,16<br>  blr<br></pre>
+
+Notice above that <b>position</b> must wait for <b>velocity</b> to be stored. This is because the compiler cannot gaurantee that the two are not aliased and must assume that the write to <b>velocity</b> can overwrite the location where <b>position</b> will be read. Because the compiler must <i>effectively</i> perform the operations in the order declared in the source, it must assume this is the behavior the programmer intended.<br>
+
+<div class="rule-of-thumb">
+The use of unrestricted pointers inhibits the compiler's ability to
+schedule loads and may cause redundant loads in many cases. With few
+exceptions, accessing any value through a pointer will force the
+compiler to load, or reload, the value after any store. This is because
+the compiler cannot gaurantee that the value being loaded was not
+aliased by the value that was stored.</div>
+
+For instance, there is no reason (other than sanity) why the programmer could not call the function in this way:
+<pre class="code">void <br>call_move( vector3* some_data, float time_step, count )<br>{<br>  move( some_data, some_data, some_data, time_step, count );<br>}<br></pre>
+The use of restricted pointers would specifically disallow this.<br>
+<br>
+Compare this to the same function working with arrays of file scope.
+Working with file scope arrays represents the best case for the
+compiler with regard to alias analysis and should be used as the
+baseline for implementing functions with restricted pointers.
+<pre class="code">vector3 velocity     [ PARTICLE_COUNT ];<br>vector3 position     [ PARTICLE_COUNT ];<br>vector3 acceleration [ PARTICLE_COUNT ];<br>&nbsp;<br>void<br>move( float time_step )<br>{<br>  for (size_t i=0;i&lt;PARTICLE_COUNT;i++)<br>  {<br>    velocity[i].x += acceleration[i].x * time_step;<br>    velocity[i].y += acceleration[i].y * time_step;<br>    velocity[i].z += acceleration[i].z * time_step;<br>    position[i].x += velocity[i].x     * time_step;<br>    position[i].y += velocity[i].y     * time_step;<br>    position[i].z += velocity[i].z     * time_step;<br>  }<br>}<br></pre>With the above code the compiler knows the arrays will be stored
+seperately and can determine that they are three independent data <i>windows</i>, or <i>stripes</i> and there can be no aliasing among them. A data stripe can be thought of as a <i>data channel</i> made up of indexable elements. <br>
+<br>
+
+<table width="400" border="1">
+  <tbody><tr>
+    <th scope="col">Data Channel </th>
+    <th scope="col">Channel Elements (by Index) </th>
+    </tr>
+  <tr>
+    <td>velocity</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N] </td>
+    </tr>
+  <tr>
+    <td>position</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+    </tr>
+  <tr>
+    <td>acceleration</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+    </tr>
+</tbody></table>
+
+<div class="rule-of-thumb">
+An element in a restricted data stripe can be a function of one or more elements of any other restricted data stripes, but <b>cannot</b> be a function of a <i>change</i> in an element of a data stripe.</div>
+
+<pre class="code"># This code was compiled with GCC 3.4.1 for PowerPC,<br># with the following options: <b>-O3 -fstrict-aliasing -std=c99</b><br>#<br>move:<br>  lis    3,velocity@ha<br>  lis    11,acceleration@ha<br>  lis    9,position@ha<br>  la     6,velocity@l(3)<br>  la     5,acceleration@l(11)<br>  la     7,position@l(9)<br>  li     8,0<br>  stwu   1,-16(1)<br>  li     0,8192<br>  mtctr  0<br>.L18:<br>  add    12,8,6<br>  <span style="color: rgb(0, 0, 255);">lfsx   12,8,6     # Load  velocity     + 0</span><br>  add    10,8,5<br>  <span style="color: rgb(0, 0, 255);">lfsx   13,8,5     # Load  acceleration + 0<br>  lfs    8,4(12)    # Load  velocity     + 4</span><br>  add    4,8,7<br>  <span style="color: rgb(0, 0, 255);">lfs    5,8(10)    # Load  acceleration + 8<br>  lfs    6,8(12)    # Load  velocity     + 8<br>  lfs    7,4(10)    # Load  acceleration + 4</span><br>  fmadds 9,13,1,12<br>  fmadds 10,7,1,8<br>  fmadds 11,5,1,6<br>  <span style="color: rgb(0, 0, 255);">lfsx   4,8,7      # Load  position     + 0<br>  lfs    3,4(4)     # Load  position     + 4<br>  lfs    2,8(4)     # Load  position     + 8</span><br>  fmadds 0,9,1,4<br>  fmadds 13,10,1,3<br>  fmadds 12,11,1,2<br>  <span style="color: rgb(255, 0, 0);">stfsx  9,8,6      # Store velocity     + 0<br>  stfs   11,8(12)   # Store velocity     + 8<br>  stfs   10,4(12)   # Store velocity     + 4<br>  stfsx  0,8,7      # Store position     + 0</span><br>  addi   8,8,12<br>  <span style="color: rgb(255, 0, 0);">stfs   13,4(4)    # Store position     + 4<br>  stfs   12,8(4)    # Store position     + 8</span><br>  bdnz   .L18<br>  addi   1,1,16<br>  blr<br></pre>
+
+All the stores are completed at the end of the loop. More specifically, the load for <strong>position</strong> is scheduled <em>before</em> the store of <strong>velocity</strong>. This validates that the compiler has enough information to determine that the values stored do not alias the values loaded. <br>
+<br>
+In order to get this same behavior with non-file scope pointers, use
+the restrict keyword to declare that every location which is either
+loaded or stored has no aliases.
+<pre class="code">void<br>move( vector3* velocity, <br>      vector3* position, <br>      vector3* acceleration, <br>      float    time_step, <br>      size_t   count, <br>      size_t   stride )<br>{<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration_x = &amp;acceleration-&gt;x;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> velocity_x     = &amp;velocity-&gt;x;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> position_x     = &amp;position-&gt;x;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration_y = &amp;acceleration-&gt;y;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> velocity_y     = &amp;velocity-&gt;y;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> position_y     = &amp;position-&gt;y;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration_z = &amp;acceleration-&gt;z;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> velocity_z     = &amp;velocity-&gt;z;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> position_z     = &amp;position-&gt;z;<br><br>  for (size_t i=0;i&lt;count*stride;i+=stride)<br>  {<br>    velocity_x[i] += acceleration_x[i] * time_step;<br>    velocity_y[i] += acceleration_y[i] * time_step;<br>    velocity_z[i] += acceleration_z[i] * time_step;<br>    position_x[i] += velocity_x[i]     * time_step;<br>    position_y[i] += velocity_y[i]     * time_step;<br>    position_z[i] += velocity_z[i]     * time_step;<br>  }<br>}<br></pre>Nine (9) non-aliased memory stipes were declared in the above
+code. This completely defines the aliasing relationships between all
+the loads and stores.<br>
+<br>
+
+<table width="400" border="1">
+  <tbody><tr>
+    <th scope="col">Data Channel </th>
+    <th scope="col">Channel Elements (by Index) </th>
+  </tr>
+  <tr>
+    <td>velocity_x</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N] </td>
+  </tr>
+  <tr>
+    <td>velocity_y</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>velocity_z</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>position_x</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>position_y</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>position_z</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>acceleration_x</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>acceleration_y</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+  <tr>
+    <td>acceleration_z</td>
+    <td>[0] ---&gt; [1] ---&gt; [2] ---&gt; [N]</td>
+  </tr>
+</tbody></table>
+<br>
+By copying addresses from from pointer to another, an implicit
+hierarchy (or tree) of pointers is created. The child pointers are
+usually completely aliased by the parent pointer and it's important not
+to use them both at the same time (i.e. in the same scope). When
+restricted child pointers are created, consider the parent pointer to
+be <i>out of scope</i> and do not make an accesses through it. Note that in this case, any use of <b>velocity</b>, <b>position</b> or <b>acceleration</b> would invalidate the restrict contract and the results would be undefined.
+
+<pre class="ascii-art">                |---&gt; velocity_x<br>velocity -------|---&gt; velocity_y<br>                |---&gt; velocity_z<br><br>                |---&gt; position_x<br>position -------|---&gt; position_y<br>                |---&gt; position_z<br><br>                |---&gt; acceleration_x<br>acceleration ---|---&gt; acceleration_y<br>                |---&gt; acceleration_z<br></pre>
+
+<div class="rule-of-thumb">
+Typically, only the leaf nodes in a hierarchy of restricted pointers should be used.</div> 
+
+This code was compiled with GCC 3.4.1 for PowerPC with the following options: <b>-O3 -fstrict-aliasing -std=c99</b>
+<pre class="code"># This code was compiled with GCC 3.4.1 for PowerPC,<br># with the following options: <b>-O3 -fstrict-aliasing -std=c99</b><br>#<br>move:<br>  stwu   1,-32(1)<br>  stw    31,28(1)<br>  mullw  31,6,7<br>  stw    30,24(1)<br>  cmplwi 7,31,0<br>  mr     30,7<br>  addi   12,3,4<br>  addi   6,5,4<br>  addi   8,4,4<br>  addi   7,5,8<br>  addi   10,3,8<br>  addi   11,4,8<br>  li     9,0<br>  ble-   7,.L27<br>.L31:<br>  slwi   0,9,2<br>  <span style="color: rgb(0, 0, 255);">lfsx   13,3,0</span><span style="color: rgb(0, 0, 255);">     # Load  velocity_x</span><br>  add    9,9,30<br>  <span style="color: rgb(0, 0, 255);">lfsx   8,12,0</span><span style="color: rgb(0, 0, 255);">     # Load  velocity_y</span><br>  cmplw  7,31,9<br> <span style="color: rgb(0, 0, 255);"> lfsx   6,10,0<span style="color: rgb(0, 0, 255);">     # Load  velocity_z</span><br>  lfsx   12,5,0<span style="color: rgb(0, 0, 255);">     # Load  acceleration_x</span><br>  lfsx   7,6,0<span style="color: rgb(0, 0, 255);">      # Load  acceleration_y</span><br>  lfsx   5,7,0<span style="color: rgb(0, 0, 255);">      # Load  acceleration_z</span></span><br>  fmadds 11,12,1,13<br>  fmadds 10,7,1,8<br>  fmadds 9,5,1,6<br>  <span style="color: rgb(0, 0, 255);">lfsx   4,4,0      # Load  position_x<br>  lfsx   3,8,0      # Load  position_y<br>  lfsx   2,11,0</span><span style="color: rgb(0, 0, 255);">     # Load  position_z</span><br>  fmadds 0,11,1,4<br>  fmadds 13,10,1,3<br>  fmadds 12,9,1,2<br>  <span style="color: rgb(255, 0, 0);">stfsx  11,3,0     # Store velocity_x<br>  stfsx  10,12,0    # Store velocity_y<br>  stfsx  9,10,0     # Store velocity_z<br>  stfsx  0,4,0      # Store position_x<br>  stfsx  13,8,0     # Store position_y<br>  stfsx  12,11,0</span><span style="color: rgb(255, 0, 0);">    # Store position_z</span><br>  bgt+   7,.L31<br>.L27:<br>  lwz    30,24(1)<br>  lwz    31,28(1)<br>  addi   1,1,32<br>  blr<br></pre>
+This version has all the flexibility of the first (unrestricted)
+version and the performance of the second (file scope arrays) version.
+You should expect code where all aliasing information is declared with
+the restrict keyword to <i>almost always</i> perform significantly better, and <em>never</em>
+worse, than with unrestricted pointers. This is especially true on
+superscalar RISC, or RISC-like architectures with large register files,
+like the PowerPC or MIPS R4000. <br>
+<br>
+The asute reader may also have noticed that because nine (9) restricted
+stripes were used instead of three (3) file scope arrays, the compiler
+has been able to select a much simplier addressing scheme. Much of the
+pointer arithmetic has been hoisted out of the loop. The version with
+the restricted pointers is actually <i>more</i> efficient than the one with file scope arrays.
+
+<div class="subtitle">Non-aliased Memory Access Patterns</div>
+
+An important distinction to make is that the restrict keyword is not restricting anything. It  is in fact <i>allowing</i>
+the compiler to do more than it could previously. It should also be
+noted that the type of the pointer that is qualified with restrict is
+not important, it is only important what location and size was used
+when loading or storing from the pointer. The restrict keyword does not
+declare that the object being pointed to is completely without aliases,
+only that the addresses that are loaded and stored from are unaliased.<br>
+<br>
+For example, the following setup would be a completely valid use of restricted pointers:
+<pre class="code">struct particle<br>{<br>  vector3 position;<br>  vector3 velocity;<br>  vector3 acceleration;<br>};<br>&nbsp;<br>[ ... ]<br>&nbsp;<br>void <br>call_move( particle* particles, float time_step, count )<br>{<br>  move( &amp;particles-&gt;position, <br>        &amp;particles-&gt;velocity, <br>        &amp;particles-&gt;acceleration, <br>        time_step, <br>        count, <br>        sizeof(particle) );<br>}<br></pre>
+Although each stripe of data is part of the same "object", none of the
+accesses would be aliased. Some runtime systems try to determine
+whether or not pointers are aliased by simply checking to see if the
+memory windows overlap. That is not sufficient. <div class="rule-of-thumb">
+Memory windows <i>can</i> overlap and still be non-aliased.
+</div>
+
+<div class="subtitle">Usage and Suggestions</div>
+Use of the restrict keyword should be very common. It should be used as
+a standard part of all new code. Older code should be revisited as
+possible to take advantage of the new optimization opportunities. It is
+somewhat difficult to refactor restricted requirements into
+pre-existing code as a certain amount of alias analysis must be done by
+the programmer. However, for the majority of live code in typical
+applications, memory access is not aliased (nor are memory windows
+overlapping) and aliasing hazards will be limited to a small fraction
+of the code base.<br>
+
+<div class="rule-of-thumb">
+Before modifying code to use the restrict keyword, ensure that all code can compile safely with strict aliasing enabled.
+</div>
+Programmers using functions that make assumptions about aliasing must
+know what those assumptions are. Certainly, if at all possible, memory
+usage patterns should be documented. However, at the very least,
+aliasing assumptions in the parameters passed to the functions should
+be declared. In the above examples, the parameters <b>velocity</b>, <b>position</b> and <b>acceleration</b> must not be aliased and the restrict contract should be made public by <i>also</i> declaring those parameters restricted.
+
+<pre class="code">void <br>move( vector3* restrict velocity, <br>      vector3* restrict position, <br>      vector3* restrict acceleration, <br>      float             time_step, <br>      size_t            count, <br>      size_t            stride );<br></pre>
+Not publishing aliasing assumptions will lead to very difficult to find
+bugs. Programmers will not know that the data must be independent and
+someone, someday will find a reason to use the same array in two or
+more pointers.<br>
+<br>
+Take for example <b>memcpy</b>, which has been officially changed to have the following declaration:
+<pre class="code">void* <br>memcpy(void*       restrict s1, <br>       const void* restrict s2, <br>       size_t               n );<br></pre>
+<i>Can you guess why?</i><br>
+
+<div class="rule-of-thumb">
+Use restrict in function prototypes and in structure definitions to publish the assumptions made about aliasing.
+</div>
+Restricted pointers can be copied from one to another to create a
+hierarchy of pointers. However there is one limitation defined in the
+C99 standard. The child pointer <b>must not</b>
+be in the same block-level scope as the parent pointer. The result of
+copying restricted pointers in the same block-level scope is undefined.
+<pre class="code">{<br>  vector3* restrict position   = &amp;obj_a-&gt;position;<br>  float*   restrict position_x = &amp;position-&gt;x; &lt;-- UNDEFINED<br>  {<br>    float* restrict position_y = &amp;position-&gt;y; &lt;-- VALID<br>  }<br>}<br></pre>  
+
+<div class="rule-of-thumb">
+Restricted child pointers must be in a different block-level scope than the parent pointer.
+</div>
+
+<br>There is one additional problem in the assembly output above which
+is somewhat particular to the GCC scheduler. Notice that the load for <b>position </b>
+happens immediately before its update and store. The first multiply-add
+will stall waiting the first load to be completed before executing. The
+first float (<b>position_x</b>) <i>will not</i> be ready in three (3)
+cycles. It would be considerably better (and faster) if the load could
+be pushed closer to the top of the loop so that it is more likely to be
+completed by the time it is needed.
+<pre class="code">  <span style="color: rgb(0, 0, 255);">lfsx   4,4,0      # Load   position_x<br>  lfsx   3,8,0      # Load   position_y<br>  lfsx   2,11,0     # Load   position_z</span><br>  <span style="color: rgb(255, 0, 255);">fmadds 0,11,1,4   # Update position_y<br>  fmadds 13,10,1,3  # Update position_x<br>  fmadds 12,9,1,2   # Update position_z</span><br></pre>Due to the order in which scheduling is done in GCC, it is always
+better to simplify expressions. Do not mix memory access with
+calculations. The code can be re-written as follows:
+<pre class="code">void<br>move( vector3* <span style="color: rgb(0, 0, 255);">restrict</span> velocity, <br>      vector3* <span style="color: rgb(0, 0, 255);">restrict</span> position, <br>      vector3* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration, <br>      float             time_step,  <br>      size_t            count, <br>      size_t            stride )<br>{<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration_x = &amp;acceleration-&gt;x;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> velocity_x     = &amp;velocity-&gt;x;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> position_x     = &amp;position-&gt;x;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration_y = &amp;acceleration-&gt;y;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> velocity_y     = &amp;velocity-&gt;y;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> position_y     = &amp;position-&gt;y;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> acceleration_z = &amp;acceleration-&gt;z;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> velocity_z     = &amp;velocity-&gt;z;<br>  float* <span style="color: rgb(0, 0, 255);">restrict</span> position_z     = &amp;position-&gt;z;<br><br>  for (size_t i=0;i&lt;count*stride;i+=stride)<br>  {<br>    const float ax  = acceleration_x[i];<br>    const float ay  = acceleration_y[i];<br>    const float az  = acceleration_z[i];<br>    const float vx  = velocity_x[i];<br>    const float vy  = velocity_y[i];<br>    const float vz  = velocity_z[i];<br>    const float px  = position_x[i];<br>    const float py  = position_y[i];<br>    const float pz  = position_z[i];<br><br>    const float nvx = vx + ( ax * time_step );<br>    const float nvy = vy + ( ay * time_step );<br>    const float nvz = vz + ( az * time_step );<br>    const float npx = px + ( vx * time_step );<br>    const float npy = py + ( vy * time_step );<br>    const float npz = pz + ( vz * time_step );<br><br>    velocity_x[i]   = nvx;<br>    velocity_y[i]   = nvy;<br>    velocity_z[i]   = nvz;<br>    position_x[i]   = npx;<br>    position_y[i]   = npy;<br>    position_z[i]   = npz;<br>  }<br>}<br></pre>
+
+<pre class="code"># This code was compiled with GCC 3.4.1 for PowerPC,<br># with the following options: <b>-O3 -fstrict-aliasing -std=c99</b><br>#<br>move:<br>  stwu   1,-32(1)<br>  stw    31,28(1)<br>  mullw  31,6,7<br>  stw    30,24(1)<br>  cmplwi 7,31,0<br>  mr     30,7<br>  addi   12,3,4<br>  addi   6,5,4<br>  addi   8,4,4<br>  addi   7,5,8<br>  addi   10,3,8<br>  addi   11,4,8<br>  li     9,0<br>  ble-   7,.L47<br>.L51:<br>  slwi   0,9,2<br>  <span style="color: rgb(0, 0, 255);">lfsx   8,3,0       # Load   vx</span><br>  add    9,9,30<br>  <span style="color: rgb(0, 0, 255);">lfsx   7,12,0      # Load   vy</span><br>  cmplw  7,31,9<br>  <span style="color: rgb(0, 0, 255);">lfsx   6,10,0      # Load   vz<br>  lfsx   10,4,0      # Load   px<br>  lfsx   9,8,0       # Load   py<br>  lfsx   5,11,0      # Load   pz<br>  lfsx   4,5,0       # Load   ax<br>  lfsx   3,6,0       # Load   ay<br>  lfsx   2,7,0       # Load   az</span><br>  <span style="color: rgb(255, 0, 255);">fmadds 0,8,1,10    # Update npx<br>  fmadds 13,7,1,9    # Update npy<br>  fmadds 12,6,1,5    # Update npz<br>  fmadds 11,4,1,8    # Update nvx<br>  fmadds 10,3,1,7    # Update nvy<br>  fmadds 9,2,1,6     # Update nvz</span><br>  <span style="color: rgb(255, 0, 0);">stfsx  0,4,0       # Store  npx<br>  stfsx  13,8,0      # Store  npy<br>  stfsx  12,11,0     # Store  npz<br>  stfsx  11,3,0      # Store  nvx<br>  stfsx  10,12,0     # Store  nvy<br>  stfsx  9,10,0      # Store  nvz</span><br>  bgt+   7,.L51<br>.L47:<br>  lwz    30,24(1)<br>  lwz    31,28(1)<br>  addi   1,1,32<br>  blr<br></pre>The loads are now properly scheduled and moved as far in advance
+as possible. The pattern [Load --&gt; Update --&gt; Store] is usually
+the optimal pattern for simple memory transformations on a superscalar
+RISC-like architecture, and is exactly what is being emitted. This is
+reasonably close to good hand-written assembly for the same code
+(without re-defining the problem), and the code now very suitable for
+unrolling.<br>
+
+<div class="rule-of-thumb">
+Simplify expressions. Do not mix memory access with calculations. Use the [ Load --&gt; Update --&gt; Store ] pattern.
+</div>
+ 
+<div class="subtitle">Summary</div>
+<ul><li>Strict aliasing means that two objects of different types cannot
+refer to the same location in memory. Enable this option in GCC with
+the <strong>-fstrict-aliasing</strong> flag. Be sure that <i>all</i> code can safely run with this rule enabled. Enable strict aliasing related warnings with <strong>-Wstrict-aliasing</strong>, but do not expect to be warned in all cases. </li><li>Compare the assembly output of the function with restricted
+pointers and file scope arrays to ensure that all of the possible
+aliasing information has been used.</li><li>Only use restricted leaf pointers. Use of parent pointers may break the restrict contract.</li><li>Publish as many assumptions as possible about aliasing information in the function declaration.</li><li>Memory windows may be overlapping and still be without aliases. Do not limit the data design to non-overlapping windows.</li><li>Begin using the restrict keyword immediately. Retrofit old code as soon as possible.</li><li>Keep loads and stores separated from calculations. This results in
+better scheduling in GCC, and makes the relationship between the output
+assembly and the original source clearer.</li></ul>
+
+<div class="subtitle">Additional Reading</div>
+<ul><li><a href="http://en.wikipedia.org/wiki/Aliasing_%28computing%29">Aliasing (computing) [wikipedia.org]</a></li><li><a href="http://mail-index.netbsd.org/tech-kern/2003/08/11/0001.html">Aliasing, Krister Walfridsson [netbsd.org]</a></li><li><a href="http://www.intel.com/software/products/compilers/clin/docs/main_cls/mergedprojects/optaps_cls/common/optaps_perf_run.htm">Memory Aliasing on Itanium®-based Systems [intel.com]</a></li><li><a href="http://www.cs.princeton.edu/%7Ejqwu/Memory/survey.html">Survey of Alias Analysis [princeton.edu]</a></li><li><a href="http://realtimecollisiondetection.net/pubs/GDC03_Ericson_Memory_Optimization.ppt">Memory Optimization, Christer Ericson [realtimecollisiondetection.net]</a></li><li><a href="http://www.cs.pitt.edu/%7Emock/papers/clei2004.pdf">Why Programmer-specified Aliasing is a Bad Idea, Markus Mock [pitt.edu]</a></li><li><a href="http://www.hlrs.de/organization/tsc/services/tools/docu/kcc/UserGuide/chapter_4.html">KAI C++ User's Guide, 4.1 Writing Optimizable Code [hlrs.de]</a></li></ul>
+
+            
+        </div>
+
+
+    </div>
+    <div class="asset-footer">
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+</div>
+                    </div>
+
+                    <div id="beta">
+    <div id="beta-inner">
+        
+
+        <div class="subtitle">About CellPerformance</div>
+
+<div class="sticky-note">
+Hosting for CellPerformance graciously provided by...
+<a href="https://www.beyond3d.com/"><img alt="Beyond3D" src="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/b3d-rss.png"></a>
+<br>
+<br>
+Also check out the forums...<br>
+<a href="http://forum.beyond3d.com/forumdisplay.php?f=57">CellPerformance@B3D</a>
+</div>
+
+<!-- SpringWidgets | RSS Reader (#23) | HTML | Generated on 08/10/2009 --><object type="application/x-shockwave-flash" allownetworking="all" allowscriptaccess="always" allowfullscreen="true" height="318" width="330" id="springwidgets_23" align="middle" data="http://downloads.thespringbox.com/web/wrapper.php?file=RSS Reader.sbw" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"><param name="allowNetworking" value="all"><param name="allowScriptAccess" value="always"><param name="allowFullScreen" value="true"><param name="movie" value="http://downloads.thespringbox.com/web/wrapper.php?file=RSS Reader.sbw"><param name="flashvars" value="param_param=http%3A%2F%2Fforum.beyond3d.com%2Fexternal.php%3Ftype%3DRSS2%26forumids%3D57|http%3A%2F%2Fforum.beyond3d.com%2Fexternal.php%3Ftype%3DRSS2&amp;param_style_borderColor=0x6699CC&amp;param_style_brandUrl=&amp;param_compactView=false&amp;param_blurbLength=512"><param name="quality" value="high"><param name="wmode" value="transparent"><param name="bgColor" value="0x000000"><embed bgcolor="0x000000" allownetworking="all" allowfullscreen="true" allowscriptaccess="always" src="http://downloads.thespringbox.com/web/wrapper.php?file=RSS Reader.sbw" flashvars="param_param=http%3A%2F%2Fforum.beyond3d.com%2Fexternal.php%3Ftype%3DRSS2%26forumids%3D57|http%3A%2F%2Fforum.beyond3d.com%2Fexternal.php%3Ftype%3DRSS2&amp;param_style_borderColor=0x6699CC&amp;param_style_brandUrl=&amp;param_compactView=false&amp;param_blurbLength=512" quality="high" name="springwidgets_23" wmode="transparent" width="330" height="318" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></object><div style="font:11px/12px arial;width:330px;"><a href="http://www.springwidgets.com/widgets/view/23/?param_param=http%3A%2F%2Fforum.beyond3d.com%2Fexternal.php%3Ftype%3DRSS2%26forumids%3D57|http%3A%2F%2Fforum.beyond3d.com%2Fexternal.php%3Ftype%3DRSS2&amp;param_style_borderColor=0x6699CC&amp;param_style_brandUrl=&amp;param_compactView=false&amp;param_blurbLength=512&amp;width=330&amp;height=318" target="_blank" title="Get this widget!">Get this widget!</a></div><div style="font:11px/12px arial;width:330px;"><a href="http://cleaningupmylife.blogspot.com/" target="_blank" title="Something Funny">Something Funny</a></div>
+
+<div class="subtitle">About Mike Acton</div>
+
+<div class="sticky-note">
+<img alt="" src="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/faviconV2_004.png"> <a href="http://www.linkedin.com/pub/1/a11/2aa">Linkedin Mike Acton</a><br><img alt="" src="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/faviconV2_003.png"><a href="http://twitter.com/mike_acton">Twitter @mike_acton</a><br><img alt="" src="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/faviconV2_002.png"> <a href="http://www.facebook.com/profile.php?id=644928779&amp;ref=profile">Facebook Mike Acton</a><br><img alt="" src="Demystifying%20The%20Restrict%20Keyword%20-%20CellPerformance_files/faviconV2.png"> <a href="http://www.google.com/reader/shared/macton" rel="me">Mike Acton's shared items in Google Reader</a> 
+</div>
+
+<div id="twtr-search-widget"></div>
+<script src="http://widgets.twimg.com/j/1/widget.js"></script>
+<link href="http://widgets.twimg.com/j/1/widget.css" type="text/css" rel="stylesheet">
+<script>
+new TWTR.Widget({
+  search: 'mike_acton',
+  id: 'twtr-search-widget',
+  loop: true,
+  title: 'Recent conversations with...',
+  subject: 'Mike Acton',
+  width: 330,
+  height: 300,
+  theme: {
+    shell: {
+      background: '#3082af',
+      color: '#ffffff'
+    },
+    tweets: {
+      background: '#ffffff',
+      color: '#444444',
+      links: '#1985b5'
+    }
+  }
+}).render().start();
+</script>
+
+<div class="sticky-note">
+<a href="http://docs.google.com/View?docid=dfqqzjj8_7cfpz4c">Mike Acton's Resume</a>
+</div>
+
+
+<div class="widget-recent-entries widget-archives widget">
+    <div class="subtitle">Articles</div>
+    <div class="widget-content">
+        <ul>
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2009/08/roundup-recent-sketches-on-concurrency-data-design-and-performance.html">Roundup: Recent sketches on concurrency, data design and performance.</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2008/03/three-big-lies.html">Three Big Lies</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2007/04/utility-match.html">Utility: match</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2007/03/handy-ps3-linux-framebuffer-utilities.html">Handy PS3 Linux Framebuffer Utilities</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2007/01/howto-huge-tlb-pages-on-ps3-linux.html">HowTo: Huge TLB pages on PS3 Linux</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/11/cross-compiling-for-ps3-linux-1.html">Cross-compiling for PS3 Linux</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/09/atan2-on-spu.html">atan2 on SPU</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/08/open-source-and-console-games.html">Open Source and Console Games</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/07/update-19-july-06-added.html">Branch-free implementation of half-precision (16 bit) floating point</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/07/increment-and-decrement-wrapping-values.html">Increment And Decrement Wrapping Values</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/06/box-overlap.html">Box Overlap</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/06/a-4x4-matrix-inverse.html">A 4x4 Matrix Inverse</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html">Understanding Strict Aliasing</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/05/demystifying-the-restrict-keyword.html">Demystifying The Restrict Keyword</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/avoiding-microcoded-instructions-on-the-ppu.html">Avoiding Microcoded Instructions On The PPU</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/choosing-to-avoid-branches-a-small-altivec-example.html">Choosing to Avoid Branches: A Small Altivec Example</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/reducing-the-costs-of-comparisons-and-branches.html">Reducing The Costs Of Comparisons and Branches</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/using-masks-to-accelerate-integer-code.html">Using masks to accelerate integer code</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/a-practical-gcc-trick-to-use-during-optimization.html">A Practical GCC Trick To Use During Optimization</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/more-techniques-for-eliminating-branches.html">More Techniques for Eliminating Branches</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/branch-patterns-using-gcc.html">Branch Patterns, Using GCC</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/benefits-to-branch-elimination.html">Benefits to Branch Elimination</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/background-on-branching.html">Background on Branching</a></li>
+        
+    
+        
+            <li><a href="https://cellperformance.beyond3d.com/articles/2006/04/performance-and-good-data-design.html">Performance and Good Data Design</a></li>
+        
+        </ul>
+    </div>
+</div>
+        
+    
+
+
+
+    </div>
+</div>
+
+
+
+
+                </div>
+            </div>
+            <div id="footer">
+                <div id="footer-inner">
+                    <div id="footer-content">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+</body></html>

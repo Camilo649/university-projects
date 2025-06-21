@@ -1,0 +1,127 @@
+@font-face {
+  font-family: 'FontAwesome';
+  src: url(/assets/devzone3/old/fontawesome-webfont-ab48303af338f909f2b00197930617e78757aa05fe25a2e4c2b79743aef3d252.eot?v=4.7.0);
+  src: url(/assets/devzone3/old/fontawesome-webfont-ab48303af338f909f2b00197930617e78757aa05fe25a2e4c2b79743aef3d252.eot?#iefix&v=4.7.0) format("embedded-opentype"), url(/assets/devzone3/old/fontawesome-webfont-38af9ab8e8340ebba0182e7f6c9ec81038a1fcc162de3393a51bbb9a4153259d.woff2?v=4.7.0) format("woff2"), url(/assets/devzone3/old/fontawesome-webfont-a59f843b55ac195f9f654415c4b63d7936df8d3b8ff70e6a5798007bbcc0733a.woff?v=4.7.0) format("woff"), url(/assets/devzone3/old/fontawesome-webfont-bfd12acc5442a32d63b289c2466d1ae5d13bb2c4be76703b28e25ade7f602532.ttf?v=4.7.0) format("truetype"), url(/assets/devzone3/old/fontawesome-webfont-943c0380c1e1c7d9e167602b295fbafb8dd6c65cc0bab582edd83a01b08ed44f.svg?v=4.7.0#fontawesomeregular) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_Lt-69849d5ab334ecabff7c4a7c972e23fe303953ad89b5455b4cccd5ed2cfee7cc.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_Lt-70b0fafc15067c7fa496bbec452911d0056d99923187d404b3761bf7dff4d60d.woff2) format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_LtIt-1328424ed0e25685ea0f96c49535ec080cfc4c6cbe50c5cdb4a5d7313c43ec0a.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_LtIt-1b85b7229111bcb376704bfb181696b31bc61d2fa7ecea200ae55199690d19f3.woff2) format("woff2");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_Rg-b87ab8bc15834b142a21e113ab8476f6b45d2686072c71ee78a9a72b7e46c245.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_Rg-3c9a04ae4ac28a63bcb5f2d5a01b1d6a2bd685efbbf766ae677e670260921b09.woff2) format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_It-e128262f4c4ca1c016b12b94f82f2142ddb010ea1f61c810fc0aed62b732b186.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_It-48a536536695cc099a0491912fb240bbc085dcd61202c02e85695e2321c62547.woff2) format("woff2");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_Md-43e0c2b82f787c44ad79828e9570372af645c9c75d64b311c410f33217aee7c3.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_Md-c7e51bea381b743d617ccd6bc659d3d0f31eeeddc5817122b1e7fb18c6a83a75.woff2) format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_MdIt-d1882d55db5a9b1dc46f54d3c9c40c8f7eb5abd4d54ba64def0f13ed6724ce96.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_MdIt-52d4d679852e5b0bb7ee4a3ab5e06e70b1d2b65ba43a4974805d953b0b9e449f.woff2) format("woff2");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_Bd-948c00c48f0de8175f250433e4a8da53eb2259d76babe878a75f08cb6fc48849.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_Bd-7097dff919b768880186b21fb730cc4b2d8f091c366fceb8438c26b37adfdabc.woff2) format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url(/assets/devzone3/old/NVIDIASans_W_BdIt-76c41ad704a434da013664bfa08c9d553d66aa3a3456abaa0c790ad4ef9a1610.woff) format("woff"), url(/assets/devzone3/old/NVIDIASans_W_BdIt-f43bcb61f17dca4ae22baefc7378475ac4092f7e51754c7dd95c7070c4ca9781.woff2) format("woff2");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_BdIt-24b23a0ebb16f024c14b4711f4b9942060d3df8ae9d0f97caa11614f05531943.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_BdIt-71d1b27da98846cf29b7d58b4382bb9e54b5f4c19423e6487f048edf02cdd8ab.woff) format("woff");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_Bd-dd109f1132c7fd2d5356130993838b981714f638b2d559cedfdd925e40aa3554.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_Bd-18a08cc74c343113604fadcda98cd32818755d3a603061ed47fc59c93b902539.woff) format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_MdIt-f1fa20559704e7638dbb0da60e262289dab5792ec47ea3ec23f41815232073e9.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_MdIt-e3dac8de53db19c921dcad93f69c59bef8c979745126d85d320fde9062344ead.woff) format("woff");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_Md-49bde5653fa4f4be872aabe74dbc3ab279810d112e26e27cd6d6a06ae354bc62.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_Md-e6e6ec77668e9b2e89405d5731e22be3a4df4cc022b0d1289674444ab6781b90.woff) format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_It-20bbcfa820bf57931422c64f7e0d73811030aa81717710811a58cd047228385d.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_It-feb4148c81d942d42c33add31177672be61bde97b5c8d6ffc9caaa2acb0a3817.woff) format("woff");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_Rg-e1108ca3a84e4d65bbe1d53604b693351aa95e0b7b0c69f7f49934b2b97aeac5.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_Rg-dd8095e5ddbaa726548af29a2e2814e6cfd3f30857ef0d622559e39eee44ded3.woff) format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_LtIt-cfa003d6dab38e8c01bdf6ad04dbd127ac723e57759f8383fbc5ddd7723f809b.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_LtIt-c3efe7f7486f8a01b38ba205b8ea2fcb38ffd6ae3fa1ae12e19a39af8aa37b75.woff) format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NVIDIA-APAC';
+  src: url(/assets/devzone3/old/NVIDIASans_APAC_W_Lt-d5b1823f90bece6fcb4b42e5ce64c200561df13c0be9ef46721a3344822cac89.woff2) format("woff2"), url(/assets/devzone3/old/NVIDIASans_APAC_W_Lt-fea50d93b395083f08fa22402e6471f0c20f743aa4f791c94ea80e45b0ad29dd.woff) format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "params.h": "c",
+        "glew.h": "c",
+        "immintrin.h": "c",
+        "limits": "c",
+        "xorshift32.h": "c",
+        "stdint.h": "c",
+        "stdlib.h": "c",
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp"
+    }
+}

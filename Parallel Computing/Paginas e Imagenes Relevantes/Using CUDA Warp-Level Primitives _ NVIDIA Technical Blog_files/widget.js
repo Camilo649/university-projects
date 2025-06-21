@@ -1,0 +1,1 @@
+console.error('Hushly Subscription is expired.')

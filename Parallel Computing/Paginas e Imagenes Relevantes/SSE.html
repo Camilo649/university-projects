@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>SSE</title>
+
+<meta charset="utf-8">
+<meta name="description" content="sse, streaming SIMD extensions">
+<meta name="keywords" content="sse, simd">
+<meta name="author" content="Song Ho Ahn">
+<meta name="copyright" content="Copyright 2005 Song Ho Ahn, All rights reserved">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://www.songho.ca/misc/sse/sse.html">
+
+<!-- favicon -->
+<link rel="icon" type="image/x-icon" href="https://www.songho.ca/favicon.ico">
+
+<link rel="stylesheet" media="screen" href="SSE_files/screen.css">
+<link rel="stylesheet" media="print" href="SSE_files/print.css">
+
+<!-- Javascript -->
+<script src="SSE_files/f.txt"></script><script src="SSE_files/f_002.txt"></script><script src="SSE_files/songho.js" defer="defer"></script>
+
+<!-- google adsense -->
+<script async="" src="SSE_files/f_003.txt" crossorigin="anonymous" data-checked-head="true">
+</script>
+
+<!-- discord block -->
+<!--
+<script async src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3">
+let crate = new Crate(
+{
+    server: "1228158675181633536",
+    channel:"1228158675181633539",
+    color: "#888"
+});
+crate.notify("Post your message");
+</script>
+-->
+
+<script type="text/javascript" async="" src="SSE_files/embed.js"></script><script src="SSE_files/menu.js" id="L2pzL21lbnUuanM="></script><meta http-equiv="origin-trial" content="AlK2UR5SkAlj8jjdEc9p3F3xuFYlF6LYjAML3EOqw1g26eCwWPjdmecULvBH5MVPoqKYrOfPhYVL71xAXI1IBQoAAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="Amm8/NmvvQfhwCib6I7ZsmUxiSCfOxWxHayJwyU1r3gRIItzr7bNQid6O8ZYaE1GSQTa69WwhPC9flq/oYkRBwsAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A9wSqI5i0iwGdf6L1CERNdmsTPgVu44ewj8QxTBYgsv1LCPUVF7YmWOvTappqB1139jAymxUW/RO8zmMqo4zlAAAAACNeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MzY4MTI4MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A+d7vJfYtay4OUbdtRPZA3y7bKQLsxaMEPmxgfhBGqKXNrdkCQeJlUwqa6EBbSfjwFtJWTrWIioXeMW+y8bWAgQAAACTeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MzY4MTI4MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><script async="" src="SSE_files/ca-pub-8351951494359118"></script><script async="" src="SSE_files/AGSKWxW_CWCsTEamauVC8XFL-F1TJHV_KPAr7R1XxX9WeopXTZNIXjW8s3jyb0QO"></script><script async="" src="SSE_files/AGSKWxWwkT4M7Rsdox6jQzfSwrMwpH6Tz--ue8Zrxi8M4l7ghHdWL1QU32d4Sv_R"></script><script async="" src="SSE_files/AGSKWxUqSfY7j0tDoZSg-k1KP7LYeuL47IcaFlW7nQ8KPp5LWbzGZieq7AVR-7gt"></script><script async="" src="SSE_files/AGSKWxUY6P3KEG2U4-vkd1DFAcPFOp2Tkm6u4y6UIuHesBjcFTG1G_SKZ-W1mmWF"></script></head>
+
+
+<body id="misc/sse" aria-hidden="false" style="padding: 0px 0px 154px;">
+<div id="wrap">
+
+<div id="menublock" class="include-html"><nav id="menu">
+<ul>
+<li>
+<a href="https://www.songho.ca/index.html" id="menu_index"><img src="SSE_files/songho_small.png" style="width:32px;height:32px;padding-right:5px" alt="songho.ca icon">songho.ca</a>
+</li>
+
+<li>
+<a href="https://www.songho.ca/dsp/index.html" id="menu_dsp/index"><span class="plusminus"></span>DSP</a>
+    <ul id="menu_ul_dsp" style="height: 279px;">
+        <li><a href="https://www.songho.ca/dsp/signal/signals.html" id="menu_dsp/signals">Signals</a></li>
+        <li><a href="https://www.songho.ca/dsp/system/systems.html" id="menu_dsp/systems">Systems</a></li>
+        <li><a href="https://www.songho.ca/dsp/convolution/convolution.html" id="menu_dsp/convolution">Convolution</a>
+            <ul>
+                <li><a href="https://www.songho.ca/dsp/convolution/convolution2d_example.html" id="menu_dsp/convolution2d_example">Example of 2D Convolution</a></li>
+                <li><a href="https://www.songho.ca/dsp/convolution/convolution2d_separable.html" id="menu_dsp/convolution2d_separable">2D Separable Convolution</a></li>
+                <li><a href="https://www.songho.ca/dsp/convolution/convolution_commutative.html" id="menu_dsp/convolution_commutative">Proof of Commutative Convolution</a></li>
+            </ul>
+        </li>
+        <!--
+        <li><a href="/dsp/window/window.html" id="menu_dsp_window">Window Filters</a></li>
+        -->
+        <li><a href="https://www.songho.ca/dsp/luminance/luminance.html" id="menu_dsp/luminance">Luminance</a></li>
+        <li><a href="https://www.songho.ca/dsp/histogram/histogram.html" id="menu_dsp/histogram">Histogram</a></li>
+        <li><a href="https://www.songho.ca/dsp/cannyedge/cannyedge.html" id="menu_dsp/cannyedge">Canny Edge Detection</a></li>
+    </ul>
+</li>
+
+<li>
+<a href="https://www.songho.ca/opengl/index.html" id="menu_opengl/index"><span class="plusminus"></span>OpenGL</a>
+    <ul id="menu_ul_opengl" style="height: 734px;">
+        <li><a href="https://www.songho.ca/opengl/gl_overview.html" id="menu_opengl/overview">Overview</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_pipeline.html" id="menu_opengl/pipeline">Rendering Pipeline</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_transform.html" id="menu_opengl/transform">Transformations &amp; Coordinate Systems</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_projectionmatrix.html" id="menu_opengl/projectionmatrix">Projection Matrix</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_viewport.html" id="menu_opengl/viewport">Viewport Transform</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_normaltransform.html" id="menu_opengl/normaltransform">Normal Vector Transformation</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_rotate.html" id="menu_opengl/rotate">3D Rotation Along Axis</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_quaternion.html" id="menu_opengl/quaternion">Quaternion to Matrix</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_anglestoaxes.html" id="menu_opengl/anglestoaxes">Angles to Axes</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_lookattoaxes.html" id="menu_opengl/lookattoaxes">LookAt to Axes</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_camera.html" id="menu_opengl/camera">Camera</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_matrix.html" id="menu_opengl/matrix">Matrix Class (C++)</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_vertexarray.html" id="menu_opengl/vertexarray">Vertex Array</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_displaylist.html" id="menu_opengl/displaylist">Display List</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_vbo.html" id="menu_opengl/vbo">Vertex Buffer Object (VBO)</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_pbo.html" id="menu_opengl/pbo">Pixel Buffer Object (PBO)</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_fbo.html" id="menu_opengl/fbo">Frame Buffer Object (FBO)</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_tessellation.html" id="menu_opengl/tessellation">GLU Tessellation</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_mvc.html" id="menu_opengl/mvc">Windows GUI Application with MVC</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_sphere.html" id="menu_opengl/sphere">Sphere, Icosphere, Cubesphere</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_cylinder.html" id="menu_opengl/cylinder">Cylinder, Prism, Pipe</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_cone.html" id="menu_opengl/cone">Cone, Pyramid</a></li>
+        <li><a href="https://www.songho.ca/opengl/gl_torus.html" id="menu_opengl/torus">Torus</a></li>
+    </ul>
+</li>
+
+<li>
+<a href="https://www.songho.ca/math/index.html" id="menu_math/index"><span class="plusminus"></span>Math</a>
+    <ul id="menu_ul_math" style="height: 248px;">
+        <li><a href="https://www.songho.ca/math/homogeneous/homogeneous.html" id="menu_math/homogeneous">Homogeneous Coordinates</a></li>
+        <li><a href="https://www.songho.ca/math/euler/euler.html" id="menu_math/euler">Euler's Equation</a></li>
+        <li><a href="https://www.songho.ca/math/quaternion/quaternion.html" id="menu_math/quaternion">Quaternion</a></li>
+        <li><a href="https://www.songho.ca/math/line/line.html" id="menu_math/line">Line Equation</a></li>
+        <li><a href="https://www.songho.ca/math/plane/plane.html" id="menu_math/plane">Plane Equation</a></li>
+        <li><a href="https://www.songho.ca/math/area/area.html" id="menu_math/area">Surface Area of 3D Geometry</a></li>
+        <li><a href="https://www.songho.ca/math/taylor/taylor_exp.html" id="menu_math/taylor_exp">Taylor Series: Exponential Function</a></li>
+        <li><a href="https://www.songho.ca/math/taylor/taylor_tri.html" id="menu_math/taylor_tri">Taylor Series: Trigonometric Function</a></li>
+    </ul>
+</li>
+
+<li>
+<a href="https://www.songho.ca/misc/index.html" id="menu_misc/index"><span class="plusminus"></span>Misc</a>
+    <ul id="menu_ul_misc" style="height: 248px;">
+        <li><a href="https://www.songho.ca/misc/sse/sse.html" id="menu_misc/sse" class="focuseditem">SSE (Streaming SIMD Extension)</a></li>
+        <li><a href="https://www.songho.ca/misc/alignment/dataalign.html" id="menu_misc/dataalign">Data Alignment</a></li>
+        <li><a href="https://www.songho.ca/misc/timer/timer.html" id="menu_misc/timer">High-Resolution Timer (C++)</a></li>
+        <li><a href="https://www.songho.ca/misc/tokenizer/tokenizer.html" id="menu_misc/tokenizer">String Tokenizer (C++)</a></li>
+        <li><a href="https://www.songho.ca/misc/logger/logger.html" id="menu_misc/logger">JavaScript Logger</a></li>
+        <li><a href="https://www.songho.ca/misc/treeview/treeview.html" id="menu_misc/treeview">Windows TreeView (Win32)</a>
+            <ul>
+                <li><a href="https://www.songho.ca/misc/treeview/treeviewnotify.html" id="menu_misc/treeviewnotify">TreeView Notification</a></li>
+                <li><a href="https://www.songho.ca/misc/treeview/treeviewstyles.html" id="menu_misc/treeviewstyles">TreeView Styles</a></li>
+            </ul>
+
+        </li>
+    </ul>
+</li>
+</ul>
+<p>
+&nbsp;
+</p>
+</nav>
+</div>
+
+<!-- main content block (left+right) -->
+<div id="mainblock">
+
+<div id="leftblock">
+<div class="innerblock">
+
+<h1>SSE (Streaming SIMD Extentions)</h1>
+
+<p>
+<strong>Download:</strong> <a href="https://www.songho.ca/misc/sse/files/sse_msvc.zip">sse_msvc.zip</a>, <a href="https://www.songho.ca/misc/sse/files/cpuid_msvc.zip">cpuid_msvc.zip</a>
+</p>
+
+<p>
+SIMD (Single Instruction, Multiple Data, pronounced "seem-dee") 
+computation processes multiple data in parallel with a single 
+instruction, resulting in significant performance improvement; 4 
+computations at once.
+</p>
+<p>
+SSE defines 8 new 128-bit registers (xmm0 ~ xmm7) for single-precision 
+floating-point computations. These registers are used for data 
+computations only. Since each register has 128-bit long, we can store 
+total 4 of 32-bit floating-point numbers (1-bit sign, 8-bit exponent, 
+23-bit mantissa).
+<br>
+<img src="SSE_files/sse01.jpg" width="375" height="80" alt="128-bit XMM Register">
+</p>
+
+<h2 id="scalar">Scalar and Packed Intructions</h2>
+<p>
+SSE defines two types of operations; scalar and packed. Scalar operation
+ only operates on the least-significant data element (bit 0~31), and 
+packed operation computes all four elements in parallel. SSE 
+instructions have a suffix -ss for scalar operations (<em>Single Scalar</em>) and -ps for packed operations (<em>Parallel Scalar</em>).
+<br>
+<img src="SSE_files/sse02.jpg" width="700" height="190" alt="Scalar and Packed">
+</p>
+
+<p>
+Note that upper 3 elements in xmm0 for scalar operation remain unchanged.
+</p>
+
+<h2 id="move">Data Movements</h2>
+<p>
+The first things that you should know are how to copy data from memory 
+to xmm registers and how to get the results back to your application 
+from xmm registers after SIMD operation. The data movement instructions 
+move scalar and packed data between memory and xmm registers.
+</p>
+<ul>
+<li><strong>movss</strong>: copy a single floating-point data</li>
+<li><strong>movlps</strong>: copy 2 floating-point data (low packed)</li>
+<li><strong>movhps</strong>: copy 2 floating-point data (high packed)</li>
+<li><strong>movaps</strong>: copy aligned 4 floating-point data (fast)</li>
+<li><strong>movups</strong>: copy unaligned 4 floating-point data (slow)</li>
+<li><strong>movhlps</strong>: copy 2 high elements to low position</li>
+<li><strong>movlhps</strong>: copy 2 low elements to high position</li>
+</ul>
+<p>
+<strong>movaps</strong> requires that the data in memory must be aligned 16 byte boundary for better performance. Read more about how to align data in <a href="https://www.songho.ca/misc/alignment/dataalign.html">Data Alignment</a>. The source and destination operands for <strong>movhlps</strong> and <strong>movlhps</strong> must be xmm registers.
+<img src="SSE_files/sse08.jpg" width="760" height="410" alt="store instructions movlps movhps movaps">
+</p>
+
+<h2 id="arithmetic">Arithmetic Instructions</h2>
+<p>
+Arithmetic Instruction requires 2 operands (registers or memory) to 
+perform arithmetic computation and write the result in the first 
+register. The source operand can be xmm register or memory, but the 
+destination operand must be xmm register.
+<br>
+<img src="SSE_files/sse03.jpg" width="615" height="115" alt="SSE Operator and Operands">
+</p>
+
+<table>
+<tbody><tr>
+	<th style="background-color:#eee; padding:5px 10px;">Arithmetic</th>
+	<th style="background-color:#eee; padding:5px 10px;">Scalar Operator</th>
+	<th style="background-color:#eee; padding:5px 10px;">Packed Operator</th>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq01.gif" width="64" height="19" alt="add"></td>
+	<td style="text-align:center; padding:5px 10px;">addss</td>
+	<td style="text-align:center; padding:5px 10px;">addps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq02.gif" width="64" height="17" alt="sub"></td>
+	<td style="text-align:center; padding:5px 10px;">subss</td>
+	<td style="text-align:center; padding:5px 10px;">subps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq03.gif" width="64" height="17" alt="mul"></td>
+	<td style="text-align:center; padding:5px 10px;">mulss</td>
+	<td style="text-align:center; padding:5px 10px;">mulps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq04.gif" width="64" height="17" alt="div"></td>
+	<td style="text-align:center; padding:5px 10px;">divss</td>
+	<td style="text-align:center; padding:5px 10px;">divps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq07.gif" width="43" height="41" alt="rcp"></td>
+	<td style="text-align:center; padding:5px 10px;">rcpss</td>
+	<td style="text-align:center; padding:5px 10px;">rcpps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq05.gif" width="52" height="25" alt="sqrt"></td>
+	<td style="text-align:center; padding:5px 10px;">sqrtss</td>
+	<td style="text-align:center; padding:5px 10px;">sqrtps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq06.gif" width="55" height="44" alt="rsqrt"></td>
+	<td style="text-align:center; padding:5px 10px;">rsqrtss</td>
+	<td style="text-align:center; padding:5px 10px;">rsqrtps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq08.gif" width="93" height="21" alt="max"></td>
+	<td style="text-align:center; padding:5px 10px;">maxss</td>
+	<td style="text-align:center; padding:5px 10px;">maxps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><img src="SSE_files/sse_eq09.gif" width="74" height="18" alt="min"></td>
+	<td style="text-align:center; padding:5px 10px;">minss</td>
+	<td style="text-align:center; padding:5px 10px;">minps</td>
+</tr>
+</tbody></table>
+
+<h2 id="shuffle">Shuffle Instruction</h2>
+<p>
+<strong>shufps</strong> requires 2 operands and 1 mask. <strong>shufps</strong>
+ selects 2 elements from each operand (register) based on the mask. 2 
+elements from the first operand are copied to the lower 2 elements in 
+destination register and 2 elements from the second operand are copied 
+to the higher 2 elements in the destination register.
+</p>
+<p>
+Using <strong>shufps</strong> instruction, you can shuffle any 4 data elements with any order. The frequent usages of <strong>shufps</strong> are broadcast, swap and rotate.
+</p>
+
+<h3>Broadcast</h3>
+<p style="margin-left:30px">
+It copies all 4 fields with a single data element. The possible masks are
+</p>
+
+<p style="margin-left:30px">
+<strong>00h:</strong> Broadcast the least significant data element
+<br>
+<strong>55h:</strong> Broadcast the second data element
+<br>
+<strong>AAh:</strong> Broadcast the third data element
+<br>
+<strong>FFh:</strong> Broadcast the most significant data element
+<br>
+<img src="SSE_files/sse04.jpg" width="750" height="215" alt="broadcast shufps">
+</p>
+
+<h3>Swap</h3>
+<p style="margin-left:30px">
+This instruction switches the order of data elements reverse with <strong>1Bh</strong> (00011011b) mask.
+<br>
+<img src="SSE_files/sse05.jpg" width="365" height="285" alt="swap shufps">
+</p>
+
+<h3>Rotate</h3>
+<p style="margin-left:30px">
+It performs left or right rotation of data elements. Use <strong>93h</strong>
+ (10010011b) to shift data to left direction and the most significant 
+data element is moved to the least significant position. Use <strong>39h</strong> (00111001b) to shift data to right and the least significant data element is moved to the most significant position.
+<br>
+<img src="SSE_files/sse06.jpg" width="750" height="290" alt="rotate shufps">
+</p>
+
+<h2 id="unpack">Unpack Instruction</h2>
+<p>
+<strong>unpcklps</strong> copies and interleaves the 2 lower elements from each of the 2 operands. <strong>unpckhps</strong> copies and interleaves the 2 higher elements from each of the 2 operands into the destination register.
+<br>
+<img src="SSE_files/sse07.jpg" width="650" height="220" alt="unpack unpcklps unpckhps">
+</p>
+
+<h2 id="compare">Comparison Instructions</h2>
+<p>
+The comparison instructions compare 2 operands and set true (all 1s) or 
+false (all 0s) into destination register. Source operand can be an xmm 
+register or memory, but the destination must be an xmm register.
+</p>
+
+<table>
+<tbody><tr>
+	<th style="background-color:#eee; padding:5px 10px;">Condition</th>
+	<th style="background-color:#eee; padding:5px 10px;">Scalar Operation</th>
+	<th style="background-color:#eee; padding:5px 10px;">Packed Operation</th>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><span class="font_serif">x = y, &nbsp; x ≠ y</span></td>
+	<td style="text-align:center; padding:5px 10px;">cmpeqss, cmpneqss</td>
+	<td style="text-align:center; padding:5px 10px;">cmpeqps, cmpneqps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><span class="font_serif">x &lt; y, &nbsp; x ≮ y</span></td>
+	<td style="text-align:center; padding:5px 10px;">cmpltss, cmpnltss</td>
+	<td style="text-align:center; padding:5px 10px;">cmpltps, cmpnltps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;"><span class="font_serif">x ≤ y, &nbsp; x ≰ y</span></td>
+	<td style="text-align:center; padding:5px 10px;">cmpless, cmpnless</td>
+	<td style="text-align:center; padding:5px 10px;">cmpleps, cmpnleps</td>
+</tr>
+</tbody></table>
+
+<p>
+<img src="SSE_files/sse09.jpg" width="750" height="450" alt="SSE comparison">
+</p>
+
+<h2 id="bitwise">Bitwise Logical Instructions</h2>
+<p>
+Logical instructions perform bitwise logical operation on packed floating-point elements.
+The typical usages are negating numbers and converting to absolute values.
+</p>
+
+<table>
+<tbody><tr>
+	<th style="background-color:#eee; padding:5px 10px;">Operation</th>
+	<th style="background-color:#eee; padding:5px 10px;">Instruction</th>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">AND</td>
+	<td style="text-align:center; padding:5px 10px;">andps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">OR</td>
+	<td style="text-align:center; padding:5px 10px;">orps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">XOR</td>
+	<td style="text-align:center; padding:5px 10px;">xorps</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">AND NOT</td>
+	<td style="text-align:center; padding:5px 10px;">andnps</td>
+</tr>
+</tbody></table>
+
+<h3>Absolute Value</h3>
+<p style="margin-left:30px">
+To perform absolute value operation, store 0 at the most significant bit
+ (sign bit) and 1s at the rest bits in source register. Then perform AND
+ operation: <em>number</em> &amp; <strong>7FFFFFFFh</strong>.
+<br>
+<img src="SSE_files/sse10.jpg" width="370" height="210" alt="absolute value with andps">
+</p>
+
+<h3>Negate</h3>
+<p style="margin-left:30px">
+To perform negating, store 1 at the most significant bit and 0s at the rest bits. Then perform XOR operation: <em>number</em> ^ <strong>8000000h</strong>.
+<br>
+<img src="SSE_files/sse11.jpg" width="370" height="210" alt="negate value with xorps">
+</p>
+
+<h2 id="conversion">Conversion</h2>
+<p>
+Conversion instructions convert from floating-point number to integer or vise versa.
+</p>
+
+<table>
+<tbody><tr>
+	<th style="background-color:#eee; padding:5px 10px;">Conversion</th>
+	<th style="background-color:#eee; padding:5px 10px;">Scalar Operation</th>
+	<th style="background-color:#eee; padding:5px 10px;">Packed Operation</th>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">Float to integer with rounding</td>
+	<td style="text-align:center; padding:5px 10px;">cvtss2si</td>
+	<td style="text-align:center; padding:5px 10px;">cvtps2pi</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">Float to integer with truncation</td>
+	<td style="text-align:center; padding:5px 10px;">cvttss2si</td>
+	<td style="text-align:center; padding:5px 10px;">cvttps2pi</td>
+</tr>
+<tr>
+	<td style="text-align:center; padding:5px 10px;">Integer to float</td>
+	<td style="text-align:center; padding:5px 10px;">cvtsi2ss</td>
+	<td style="text-align:center; padding:5px 10px;">cvtpi2ps</td>
+</tr>
+</tbody></table>
+
+<p>
+<br>
+The packed operations, <strong>cvtps2pi</strong>, <strong>cvttps2pi</strong> and <strong>cvtpi2ps</strong>
+ convert 2 numbers in parallel, not 4 because MMX registers (mm0~mm7) 
+are 64-bit long (2x32-bit). Therefore, two upper elements in XMM 
+registers are not used in conversion.
+<br>
+<img src="SSE_files/sse12.jpg" width="750" height="360" alt="conversion">
+</p>
+
+
+<h2 id="stream">Streaming memory Instructions</h2>
+<p>
+SSE lets read-miss latency overlap execution via the use of prefetching,
+ and it allowes write-miss latency to be reduced by overlapping 
+execution via streaming stores.
+</p>
+
+<h3>Prefetch Instructions</h3>
+<p style="margin-left:30px">
+The prefetch instructions provide cache hints to fetch data to the L1 
+and/or L2 cache before the program actually needs the data. This 
+minimizes the data access latency. These instructions are executed 
+asynchronously, therefore, program executions are not stalled while 
+prefetching.
+<br>
+<br>
+<strong>prefetcht0</strong>: move the data from memory to L1 and L2 caches using t0 hint.
+<br>
+<strong>prefetcht1</strong>: move the data from memory to L2 cache using t1 hint.
+<br>
+<strong>prefetchnta</strong>: move non-temporal aligned data from memory to L1 cache directly  (bypass L2).
+</p>
+<p style="margin-left:30px">
+Note that AMD athlonXP, Intel Pentium4 or higher CPUs include automatic 
+cache prefetching, therefore, it is not necessary to call these 
+instructions manually in your code.
+</p>
+
+<h3>Streaming Store Instructions</h3>
+<p style="margin-left:30px">
+Streaming store move instructions store non-temporal data directly to 
+memory without updating the cache. This minimizes cache pollution and 
+unnecessary bus bandwidth between cache and XMM registers because it 
+does not write-allocate on a write miss.
+</p>
+<p style="margin-left:30px">
+Non-temporal means the data are accessed irregularly at long intervals 
+(referenced once and not reused in immediate future) , for example, 
+vertex data in 3D graphics are re-generated every frame.
+Write-allocate means that data write into the cache when cache miss 
+occurs.
+<br>
+<br>
+<strong>movntps</strong>: move 4 of non-temporal floating-point elements
+ from XMM register to memory directly and bypasses the cache. The memory
+ address must be aligned 16-byte boundaries.
+<br>
+<br>
+<strong>movntq</strong>: move non-temporal quadword (2 integers, 4 shorts or 8 chars) from XMM register to memory and bypasses the cache.
+</p>
+<pre><code class="codeblock" style="margin-left:30px;">
+movntps [edi], xmm0
+
+movntq [edi], mm0
+
+</code></pre>
+
+<h3>Store Fence</h3>
+<p style="margin-left:30px">
+<strong>sfence</strong> guarantees that the data of any store instructions earlier than <strong>sfence</strong> instruction will be written to memory  before any subsequent store instruction.
+<br>
+<br>
+The following inline assembly example shows copying 4 float data (16-byte block) at once from source to destination array.
+</p>
+
+<pre><code class="codeblock" style="margin-left:30px;">
+<span class="comment">// move 4 floats (16-bytes) at once</span>
+__asm {
+    mov     ecx,    count       <span class="comment">// # of float data</span>
+    chr     ecx,    2           <span class="comment">// # of 16-byte blocks (4 floats)</span>
+    mov     edi,    dst         <span class="comment">// dst pointer</span>
+    mov     esi,    src         <span class="comment">// src pointer</span>
+
+loop1:
+    movaps  xmm0,   [esi]       <span class="comment">// get from src</span>
+    movaps  [edi],  xmm0        <span class="comment">// put to dst</span>
+
+    add     esi,    16
+    add     edi,    16
+
+    dec     ecx                 <span class="comment">// next</span>
+    jnz     loop1
+}
+
+</code></pre>
+
+
+<h2 id="detect">Detecting SSE support</h2>
+<p>
+<strong>cpuid</strong> instruction can be used whether the processor supports SSE or not. Most x86 processors support <strong>cpuid</strong> instruction nowadays, which returns CPU information and supported features. In order to determine your CPU supports <strong>cpuid</strong> instruction, try to toggle(modify) bit 21 in EFLAGS. If bit 21 can be toggled, cpuid can be called.
+</p>
+<p>
+Calling <strong>cpuid</strong> with <strong>eax=01h</strong> returns standard feature flags to the <strong>edx</strong> register. SSE is supported if bit 25 (26th bit from the least significant bit) of <strong>edx</strong> register is 1. In addition, bit-26 is for SSE2 support and bit-23 is for MMX support.
+</p>
+<p>
+This is a very simple program to detect SSE support and other features: <a href="https://www.songho.ca/misc/sse/files/cpuid_msvc.zip">cpuid_msvc.zip</a>.
+<br>
+(<em>Note that this program uses MSVC specific inline assembly codes in it.</em>)
+</p>
+
+
+<h2 id="example">Example of Inline Assembly</h2>
+<p>
+The following program is an example of SSE usages in MSVC inline 
+assembly. It includes example codes of all above SSE instructions.
+</p>
+<p>
+Download the source and binary: <a href="https://www.songho.ca/misc/sse/files/sse_msvc.zip">sse_msvc.zip</a>
+<br>
+</p>
+
+
+
+
+<!-- footer -->
+<div id="footer">
+<div style="float:left">
+©&nbsp;2005 - 2020 <a href="mailto:song.ahn@gmail.com">Song Ho Ahn (<span lang="ko">안성호</span>)</a>
+</div>
+<div style="float:right">
+<img src="SSE_files/html5_gray32.png" width="32" height="32" alt="HTML5 Logo">
+</div>
+<div style="float:right">
+<a href="https://validator.w3.org/check?uri=referer"><img src="SSE_files/I_heart_validator.png" width="80" height="15" alt="HTML Validator"></a>
+</div>
+</div>
+
+<!-- nav -->
+<div style="clear:both; font-size:80%">
+<a href="https://www.songho.ca/misc/index.html">←Back</a>
+</div>
+
+
+<div>
+&nbsp;
+</div>
+
+<!-- DISQUS block =============================== -->
+<div id="commentblock">
+<div id="buttonDisqus" class="cssbutton">Hide Comments</div>
+
+<div id="disqus_thread"><iframe id="dsq-app8906" name="dsq-app8906" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 1px !important; min-width: 100% !important; border: medium !important; overflow: hidden !important; height: 4103px !important;" width="100%" src="SSE_files/a_008.html" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+<script>
+var disqus_shortname = 'songho'; // required: replace example with your forum shortname
+//var disqus_identifier = 'test';
+(function() {
+    var dsq=document.createElement('script'); dsq.type='text/javascript'; dsq.async=true;
+    dsq.src='https://'+disqus_shortname+'.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>
+Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+
+</div>
+<!-- END OF DISQUS BLOCK ======================== -->
+
+
+</div>
+</div> <!-- END OF LEFTBLOCK -->
+
+
+<!-- right content block ============================================ -->
+<div id="rightblock">
+<div class="innerblock">
+
+<!-- Table Of Contents block ======================= -->
+<nav id="toc">
+<strong>In this page:</strong>
+<ul>
+<li><a href="#scalar" class="">Scalar and Packed Instructions</a></li>
+<li><a href="#move" class="active">Data Movements</a></li>
+<li><a href="#arithmetic">Arithmetic Instructions</a></li>
+<li><a href="#shuffle">Shuffle Instruction</a></li>
+<li><a href="#unpack">Unpack Instruction</a></li>
+<li><a href="#compare">Comparison Instructions</a></li>
+<li><a href="#bitwise">Bitwise Logical Instructions</a></li>
+<li><a href="#conversion">Conversion</a></li>
+<li><a href="#stream">Streaming Memory Instructions</a></li>
+<li><a href="#detect">Detecting SSE Support</a></li>
+<li><a href="#example">Example of Inline Assembly</a></li>
+</ul>
+</nav>
+
+</div>
+</div>
+<!-- END OF RIGHT BLOCK ============================================= -->
+
+</div>
+<!-- END OF MAIN BLOCK ============================================== -->
+
+</div>
+<!-- END OF WRAP ==================================================== -->
+
+
+
+<ins class="adsbygoogle adsbygoogle-noablate" style="display: none !important;" data-adsbygoogle-status="done" data-ad-status="unfilled"><div id="aswift_0_host" style="border: medium; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="SSE_files/ads.html" data-google-container-id="a!1" tabindex="0" title="Advertisement" aria-label="Advertisement" data-load-complete="true"></iframe></div></ins><iframe style="display: none;"></iframe><iframe style="display: none; width: 0px; height: 0px; border: medium; z-index: -1000; left: -1000px; top: -1000px;" name="googlefcPresent"></iframe><ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: block; width: 100% !important; height: 129px !important; bottom: 0px; clear: none !important; float: none !important; left: 0px; margin: 0px !important; max-height: none !important; max-width: none !important; opacity: 1; overflow: visible !important; padding: 0px !important; position: fixed; right: auto !important; top: auto !important; vertical-align: baseline !important; visibility: visible !important; z-index: 2147483647; background: rgb(250, 250, 250) !important;" data-anchor-status="displayed" data-ad-status="filled" data-anchor-shown="true"><div class="grippy-host"></div><div id="aswift_2_host" style="border: medium !important; height: 124px !important; width: 100% !important; margin: 0px !important; padding: 0px !important; position: relative !important; visibility: visible !important; background-color: transparent !important; display: inline-block !important; inset: auto !important; clear: none !important; float: none !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; vertical-align: baseline !important; z-index: auto !important;"><iframe id="aswift_2" name="aswift_2" style="width: 1005px !important; height: 124px !important; display: block; margin: 0px auto;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="1005" height="124" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="SSE_files/zrt_lookup_fy2021.html" data-google-container-id="a!3" tabindex="0" title="Advertisement" aria-label="Advertisement" data-google-query-id="CO6fj57uxowDFTZU3QIdhCQUdA" data-load-complete="true"></iframe></div></ins><iframe name="__tcfapiLocator" src="SSE_files/a_007.html" style="display: none; width: 0px; height: 0px; border: medium; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe name="__uspapiLocator" src="SSE_files/a_007.html" style="display: none; width: 0px; height: 0px; border: medium; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe name="__gppLocator" src="SSE_files/a_007.html" style="display: none; width: 0px; height: 0px; border: medium; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe name="googlefcInactive" src="SSE_files/a_007.html" style="display: none; width: 0px; height: 0px; border: medium; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe name="googlefcLoaded" src="SSE_files/a_007.html" style="display: none; width: 0px; height: 0px; border: medium; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe src="SSE_files/aframe.html" width="0" height="0" style="display: none;"></iframe></body><iframe id="google_esf" name="google_esf" src="SSE_files/zrt_lookup_fy2021.html" style="display: none;"></iframe><ins class="adsbygoogle adsbygoogle-noablate" style="display: none !important; width: 100vw !important; height: 100vh !important; inset: 0px auto auto 0px !important; clear: none !important; float: none !important; margin: 0px !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; padding: 0px !important; position: fixed !important; vertical-align: baseline !important; visibility: visible !important; z-index: 2147483647 !important; background: transparent !important;" data-adsbygoogle-status="done" aria-hidden="true" data-ad-status="filled" data-vignette-loaded="true"><div id="aswift_1_host" style="border: medium !important; height: 100vh !important; width: 100vw !important; margin: 0px !important; padding: 0px !important; position: relative !important; visibility: visible !important; background-color: transparent !important; display: inline-block !important; inset: auto !important; clear: none !important; float: none !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; vertical-align: baseline !important; z-index: auto !important;"><iframe id="aswift_1" name="aswift_1" style="width: 100vw !important; height: 100vh !important; inset: 0px auto auto 0px !important; position: absolute !important; clear: none !important; display: inline !important; float: none !important; margin: 0px !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; padding: 0px !important; vertical-align: baseline !important; visibility: visible !important; z-index: auto !important;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="" height="" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="SSE_files/zrt_lookup_fy2021_003.html" data-google-container-id="a!2" tabindex="0" title="Advertisement" aria-label="Advertisement" data-google-query-id="CO2fj57uxowDFTZU3QIdhCQUdA" data-load-complete="true"></iframe></div></ins></html>

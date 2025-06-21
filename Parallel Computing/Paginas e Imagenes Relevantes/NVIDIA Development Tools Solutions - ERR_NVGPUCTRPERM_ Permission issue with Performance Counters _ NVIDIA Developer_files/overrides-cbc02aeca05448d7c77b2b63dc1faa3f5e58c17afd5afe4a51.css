@@ -1,0 +1,275 @@
+html {
+    font-size: 1rem !important;
+}
+
+body.d-flex {
+    font-size: 16px;
+}
+
+#sticky_sidebar {
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+}
+
+#header nav .nav-wrapper form input[type="text"] {
+    max-width: initial;
+}
+
+.dz3-main-section.dz-old-theme h3 {
+    margin: 16px 0 !important;
+}
+
+/* /drive/success */
+.dz3-main-section .nav {
+    display: block;
+}
+
+/* /video-processing  */
+.page-video-processing .dz3-main-section br + br {
+    display: none;
+}
+
+/** /gpu-accelerated-libraries */
+.place_hr {
+    background: transparent;
+    opacity: 1;
+}
+
+.dz3-main-section.dz-old-theme .col-md-4.containerx {
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content;
+}
+
+.dz3-main-section.dz-old-theme blockquote + .btn-lg {
+    display: inline-block;
+    width: auto;
+}
+
+/* /es-la/rapids */
+.dz3-main-section.dz-old-theme div.clear_fix[style] {
+    padding-bottom: 1.5rem;
+}
+
+.dz-old-theme #installer-vs-not-found img {
+    width: 100%;
+    height: auto !important;
+}
+
+/* /nvidia-pro-pipeline */
+.dz3-main-section.dz-old-theme b + br + br {
+    display: block;
+}
+
+/*
+/embedded/learn/jetson-orin-nano-devkit-user-guide/hardware_spec.html
+/embedded/learn/jetson-agx-orin-devkit-user-guide/howto.html
+*/
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-index-html .md-nav,
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-two_ways_to_set_up_software-html .md-nav,
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-howto-html .md-nav,
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-developer_kit_layout-html .md-nav,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-howto-html .md-nav,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-software_setup-html .md-nav,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-index-html .md-nav,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-hardware_spec-html .md-nav {
+    font-size: 1rem;
+}
+
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-index-html .md-grid,
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-two_ways_to_set_up_software-html .md-grid,
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-howto-html .md-grid,
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-developer_kit_layout-html .md-grid,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-howto-html .md-grid,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-software_setup-html .md-grid,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-index-html .md-grid,
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-hardware_spec-html .md-grid {
+    max-width: 100%;
+}
+
+#wrapper .dz3-main-section.dz-old-theme .md-nav__title {
+    padding: 0;
+}
+
+#wrapper .dz3-main-section.dz-old-theme .md-nav__list li {
+    padding: 0;
+}
+
+#wrapper .dz3-main-section.dz-old-theme .md-nav__list li ul {
+    padding-left: 10px;
+}
+
+#wrapper .dz3-main-section.dz-old-theme.field-name-body .md-nav__list li a {
+    font-weight: 700;
+    color: var(--nv-color-black-1a1a1a) !important;
+}
+
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset h1,
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset h2,
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset h3 {
+    color: black;
+    font-weight: 400;
+}
+
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset :is(.info,.todo,.note,.check)>:is(.admonition-title,summary) {
+    padding-left: 30px;
+    margin-left: -20px;
+    margin-right: -10px;
+}
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset :is(.info,.todo,.note,.check)>:is(.admonition-title,summary)::before {
+    left: .5rem;
+}
+
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset :is(.admonition,details):is(.info,.todo,.note,.check) {
+    border-left-width: 4px;
+    padding-left: 20px;
+}
+
+.dz3-main-section.dz-old-theme.field-name-body .md-typeset .tabbed-labels>label {
+    font-size: 14px;
+}
+
+.dz3-main-section.dz-old-theme .md-content a {
+    color: var(--nv-color-black-1a1a1a);
+}
+
+.dz3-main-section.dz-old-theme .md-nav__link {
+    font-size: 16.8px;
+}
+
+.dz3-main-section.dz-old-theme .md-typeset {
+    font-size: 1rem;
+}
+
+.dz3-main-section.dz-old-theme .md-nav__link.md-nav__link--active,
+.dz3-main-section.dz-old-theme .md-nav__link:is(:focus, :hover) {
+    color: var(--nv-color-black-1a1a1a);
+    -webkit-text-decoration-color: var(--nv-color-black-1a1a1a);
+            text-decoration-color: var(--nv-color-black-1a1a1a);
+}
+
+.dz3-main-section.dz-old-theme .md-nav.md-nav--secondary li::marker {
+    content: "";
+}
+
+.dz3-main-section.dz-old-theme .md-nav.md-nav--secondary li a {
+    font-size: 16.8px;
+    color: var(--nv-color-black-1a1a1a);
+}
+
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-two_ways_to_set_up_software-html .md-typeset :is(.admonition,details),
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-howto-html .md-typeset :is(.admonition,details),
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-howto-html .md-typeset table:not([class]),
+.page-embedded-learn-jetson-agx-orin-devkit-user-guide-developer_kit_layout-html .md-typeset table:not([class]),
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-howto-html .md-typeset table:not([class]),
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-software_setup-html .md-typeset table:not([class]),
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-index-html .md-typeset table:not([class]),
+.page-embedded-learn-jetson-orin-nano-devkit-user-guide-hardware_spec-html .md-typeset table:not([class])  {
+    font-size: 1rem;
+}
+
+/* /sdk-manager */
+table th[bgcolor="#70b900"],
+table td[bgcolor="#70b900"] {
+    background-color: #70b900;
+}
+
+table th[bgcolor="#808080"],
+table td[bgcolor="#808080"] {
+    background-color: #808080;
+}
+
+table th[bgcolor="#A9A9A9"],
+table td[bgcolor="#A9A9A9"] {
+    background-color: #A9A9A9;
+}
+
+p.chart-footnote {
+   margin-top: 10px;
+   margin-bottom: 0;
+   font-size: 12px;
+   color: #999;
+   line-height: 1.25em;
+   font-weight: 400;
+}
+
+/* hpc-application-performance */
+.dz3-main-section .table.table-striped {
+    border-bottom-color: transparent;
+}
+
+.dz3-main-section.dz-old-theme hr {
+    height: 1px !important;
+    border-top: none;
+    background: #efefef;
+}
+
+/* page /cuda-90-download-archive */
+.page-cuda-90-download-archive .dz-old-theme #docPanel h3.panel-title {
+    margin: 0 !important;
+}
+
+/* page /page-embedded-learn-get-started-jetson-orin-nano-devkit */
+.dz3-main-section.dz-old-theme #lesson_menu .collapse {
+    display: none;
+}
+
+#wrapper .dz3-main-section.dz-old-theme #lesson_menu .collapse.in {
+    display: block;
+}
+
+#wrapper .dz3-main-section.dz-old-theme #lesson_menu .lesson-menu li {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0 !important;
+}
+
+#wrapper .dz3-main-section.dz-old-theme #lesson_menu .lesson-menu li a {
+    font-weight: bold;
+    color: black !important;
+}
+
+.lesson.lesson-current .row-of-buttons .row{
+    justify-content: flex-end;
+}
+
+.page-nvidia-tensorrt-7x-download .panel.panel-success,
+.page-nvidia-tensorrt-8x-download .panel.panel-success,
+.page-rdp-cudnn-download .panel.panel-success {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#jetson-reset-filters {
+    visibility: hidden;
+    transition: none;
+}
+#jetson-reset-filters.btn {
+    visibility: visible;
+}
+
+/* page /page-cuda-80-ga2-download-archive */
+.page-cuda-80-ga2-download-archive #selectTargetPlatformPanel button {
+    margin-bottom: 10px;
+}
+
+.page-cuda-80-ga2-download-archive .targetInstallerTable {
+    width: 100%;
+}
+
+.page-cuda-80-ga2-download-archive #targetInstructions,
+.page-cuda-80-ga2-download-archive .installationInstructions,
+.page-cuda-80-ga2-download-archive .patchDescription {
+    padding: 0 10px;
+}
+
+.page-cuda-80-ga2-download-archive .installerPanelTitleBar {
+    background: #76b900;
+    color: white;
+}
+
+.hero-image .hero-lockup .btn-cta {
+    display: inline-block;
+    color: black;
+}
